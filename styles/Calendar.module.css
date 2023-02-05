@@ -1,0 +1,12 @@
+.container{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.daysContainer{
+    display: flex;
+}
+
+.day{
+    border: 1px red solid;
+}

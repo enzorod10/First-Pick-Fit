@@ -1,9 +1,7 @@
 import Head from 'next/head'
 import React from 'react'
-import { AppProps } from 'next/app'
 
 const Layout = ( { children }: { children: React.ReactNode } ) => {
-    console.log(children)
     return(
         <>
             <Head>

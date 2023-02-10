@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from '../../styles/Calendar.module.css'
+import styles from '../../styles/calendar/Calendar.module.css'
 import Cell from "./Cell";
 import { DateTime } from 'luxon'
 import { uid } from "uid";
@@ -35,7 +35,7 @@ const Calendar = () => {
                 return <div key={uid()} className={styles.day}> {day} </div>
             })}
             {monthMapped?.map((cell, index) => {
-                return ( <Cell key={uid()} date={cell?.date} day={cell?.day}/>)
+                return ( <Cell key={uid()} id={`date-${cell?.date}`} date={cell?.date} day={cell?.day}/>)
             })}
         </div>
     )

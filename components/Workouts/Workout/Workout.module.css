@@ -1,0 +1,22 @@
+.container{
+    border: 1px red solid;
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    padding: 10px;
+}
+
+.workoutName{
+    align-self: center;
+}
+
+.exercises,
+.areasTargeted{
+    border: 1px red solid;
+    padding: 10px;
+}
+
+.areasTargeted{
+    display: flex;
+    justify-content: space-evenly;
+}

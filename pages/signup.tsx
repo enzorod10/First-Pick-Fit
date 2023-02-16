@@ -1,9 +1,8 @@
 import Router from 'next/router'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { useState } from 'react'
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
-import { auth } from '../firebase/clientApp'
+import { auth, db } from '../firebase/clientApp'
 import { doc, setDoc } from 'firebase/firestore'
-import { db } from '../firebase/clientApp'
 
 export default function Signup() {
     const [userInfo, setUserInfo] = useState<{email: string, password: string}>({
@@ -11,7 +10,6 @@ export default function Signup() {
         password: ''
     })
 
-    const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth)
 
     const newUser = async () => {
         await setDoc(doc(db, 'user', `${auth.currentUser?.uid}`), {
@@ -22,20 +20,12 @@ export default function Signup() {
         })
     }
 
-    if (user){
-        newUser()
-    }
-
-    if (error){
-        console.log(error)
-    }
-
     return (
         <div>
             <form>
                 <input type="email" value={userInfo.email} placeholder='email' onChange={ev => setUserInfo( { ...userInfo, email: ev.currentTarget.value })}/>
                 <input type="password" value={userInfo.password} placeholder='password' onChange={ev => setUserInfo( { ...userInfo, password: ev.currentTarget.value })}/>
-                <button onClick={() => createUserWithEmailAndPassword(userInfo.email, userInfo.password)} type='button'> Sign up</button>
+                <button onClick={() => createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)} type='button'> Sign up</button>
             </form>
         </div>
     )

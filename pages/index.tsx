@@ -1,17 +1,12 @@
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../firebase/clientApp'
 import { useEffect } from 'react'
 import Router from 'next/router'
+import { onAuthStateChanged } from 'firebase/auth'
 
 export default function Home() {
-  const [user, loading, error] = useAuthState(auth)
-  
   useEffect(() => {
-    if (user){
-      Router.push('/dashboard')
-    }
-  }, [user])
- 
+    auth.currentUser && Router.push('/dashboard')
+  }, [])
 
   return (
     <div>

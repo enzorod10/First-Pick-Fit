@@ -1,9 +1,11 @@
 import Router from 'next/router'
 import { useState } from 'react'
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import { useSelector } from 'react-redux'
 import { auth } from '../firebase/clientApp'
-import { doc, setDoc } from 'firebase/firestore'
-import { db } from '../firebase/clientApp'
+import { useSignInWithEmailAndPasswordMutation } from '../redux/features/userFeatures/userApi'
+import { userSlice } from '../redux/features/userFeatures/userSlice'
+import { RootState } from '../store'
+
 
 export default function Signup() {
     const [userInfo, setUserInfo] = useState<{email: string, password: string}>({
@@ -11,14 +13,20 @@ export default function Signup() {
         password: ''
     })
 
-    const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth)
+    const [signInWithEmailAndPassword, result] = useSignInWithEmailAndPasswordMutation()
+
+    const { loginStatus } = useSelector((state: RootState) => state[userSlice.name])
+
+    if (loginStatus){
+        Router.push('/dashboard')
+    }
 
     return (
         <div>
             <form>
                 <input type="email" value={userInfo.email} placeholder='email' onChange={ev => setUserInfo( { ...userInfo, email: ev.currentTarget.value })}/>
                 <input type="password" value={userInfo.password} placeholder='password' onChange={ev => setUserInfo( { ...userInfo, password: ev.currentTarget.value })}/>
-                <button onClick={() => signInWithEmailAndPassword(userInfo.email, userInfo.password)} type='button'> Log in</button>
+                <button type='button' onClick={() => signInWithEmailAndPassword({ auth, email: userInfo.email, password: userInfo.password })}> Log in</button>
             </form>
         </div>
     )

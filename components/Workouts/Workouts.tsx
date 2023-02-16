@@ -1,9 +1,9 @@
-
+import Workout from "./Workout/Workout";
 
 const Workouts = () => {
     return(
         <div>
-            Hello
+            <Workout />
         </div>
     )
 }

@@ -1,6 +1,17 @@
-.container{
+.innerContainer{
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+}
+
+.nav{
+    display: flex;
+    width: 100%;
+}
+
+.nav > div{
+    border: 1px red solid;
+    flex: 1;
 }
 
 .daysContainer{

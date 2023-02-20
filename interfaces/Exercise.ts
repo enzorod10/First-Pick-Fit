@@ -1,6 +1,8 @@
 import Category from './Category'
+import Type from './Type'
 
 export default interface Exercise {
     name: string
-    type: Category
+    category: Category
+    type: Type
 }

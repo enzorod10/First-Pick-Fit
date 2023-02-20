@@ -3,8 +3,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../../firebase/clientApp';
 
-export const userApi = createApi({
-    reducerPath: 'userApi',
+export const authApi = createApi({
+    reducerPath: 'authApi',
     baseQuery: fakeBaseQuery(),
     endpoints: (builder) => ({
         signInWithEmailAndPassword: builder.mutation({
@@ -16,4 +16,4 @@ export const userApi = createApi({
     })
 })
 
-export const { useSignInWithEmailAndPasswordMutation } = userApi
+export const { useSignInWithEmailAndPasswordMutation } = authApi

@@ -1,26 +1,46 @@
 import styles from './Exercises.module.css'
+import { uid } from 'uid'
+import { useGetUserSavedExercisesQuery } from '../../redux/features/user/userApi'
+import { userSlice } from '../../redux/features/user/userSlice'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
+import Exercise from './Exercise/Exercise'
 
-const Workout = () => {
+
+const Exercises = () => {
+    const { userId } = useSelector((state: RootState) => state[userSlice.name])
+
+    const { data } = useGetUserSavedExercisesQuery(userId)
+
+    console.log(data)
+
     return(
         <div className={styles.container}>
-            <h3 className={styles.workoutName}>
-                Workout Name 
-            </h3>
-            <h4>Exercises</h4>
-            <ul className={styles.exercises}>
-                <li>Exercise 1</li>
-                <li>Exercise 2</li>
-                <li>Exercise 3</li>
-                <li>Exercise 4</li>
-            </ul>
-            <h4> Areas Targeted</h4>
-            <ul className={styles.areasTargeted}>
-                <li>Chest</li>
-                <li>Shoulders</li>
-            </ul>
-
+            <h2>
+                Exercises
+            </h2>
+            {data && data.map(category => {
+                return(
+                    <div className={styles.category} key={uid()}> 
+                        <h3>{category.category}</h3>
+                        {category.types.map(type => {
+                            return(
+                                <ul className={styles.type} key={uid()}>
+                                    <h4>{type.type}</h4>
+                                    {type.exercises.map(exercise => {
+                                        return (
+                                            <Exercise key={uid()} exercise={exercise} />
+                                        )
+                                    })}
+                                </ul>
+                            )
+                        })}
+                    </div>
+                )
+            })}
+           
         </div>
     )
 }
 
-export default Workout;
+export default Exercises;

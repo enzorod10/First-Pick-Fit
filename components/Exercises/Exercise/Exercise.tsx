@@ -1,26 +1,23 @@
 import styles from './Exercise.module.css'
+import { useDraggable } from '@dnd-kit/core';
 
-const Workout = () => {
+interface AppProps{
+    exercise: String;
+}
+
+
+const Exercise = ( { exercise }: AppProps ) => {
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: 'exercise'})
+
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      } : undefined;
+
     return(
-        <div className={styles.container}>
-            <h3 className={styles.workoutName}>
-                Workout Name 
-            </h3>
-            <h4>Exercises</h4>
-            <ul className={styles.exercises}>
-                <li>Exercise 1</li>
-                <li>Exercise 2</li>
-                <li>Exercise 3</li>
-                <li>Exercise 4</li>
-            </ul>
-            <h4> Areas Targeted</h4>
-            <ul className={styles.areasTargeted}>
-                <li>Chest</li>
-                <li>Shoulders</li>
-            </ul>
-
+        <div ref={setNodeRef} className={styles.container} style={style} {...listeners} {...attributes}>
+            {exercise}
         </div>
     )
 }
 
-export default Workout;
+export default Exercise;

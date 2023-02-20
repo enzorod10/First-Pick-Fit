@@ -5,10 +5,10 @@ import { store } from "../../../store"
 
 interface InitialState{
     loginStatus: boolean,
-    userId?: number
+    userId?: string
 }
 
-const initialState: InitialState= {
+const initialState: InitialState = {
     loginStatus: false,
     userId: undefined
 }
@@ -21,15 +21,10 @@ export const userSlice = createSlice({
             state.loginStatus = action.payload.loginStatus
             state.userId = action.payload.userId
         }
-    }
-})
+    },
+    // extraReducers: (builder.addMutation()){
 
-onAuthStateChanged(auth, (user) => {
-    if (user){
-        store.dispatch(userSlice.actions.setUserStatus({ loginStatus: true, userId: user.uid}))
-    } else {
-        store.dispatch(userSlice.actions.setUserStatus({ loginStatus: false } ))
-    }
-  })
+    // }
+})
 
 export default userSlice.reducer

@@ -2,10 +2,9 @@ import Router from 'next/router'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { auth } from '../firebase/clientApp'
-import { useSignInWithEmailAndPasswordMutation } from '../redux/features/userFeatures/userApi'
-import { userSlice } from '../redux/features/userFeatures/userSlice'
+import { useSignInWithEmailAndPasswordMutation } from '../redux/features/auth/authApi'
+import { userSlice } from '../redux/features/user/userSlice'
 import { RootState } from '../store'
-
 
 export default function Signup() {
     const [userInfo, setUserInfo] = useState<{email: string, password: string}>({

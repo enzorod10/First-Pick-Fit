@@ -1,23 +1,37 @@
-import styles from './Exercise.module.css'
-import { useDraggable } from '@dnd-kit/core';
+import styles from './Exercise.module.css';
+import Exercise from '../../../interfaces/Exercise';
+import { useSortable } from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
 
 interface AppProps{
-    exercise: String;
+    exercise: Exercise;
+    editMode: boolean;
 }
 
+const Exercise = ( { exercise, editMode }: AppProps ) => {
+    const { listeners, attributes, setNodeRef, transform, transition } = useSortable( { id: 'sortable-' + exercise.id } );
 
-const Exercise = ( { exercise }: AppProps ) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: 'exercise'})
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        padding: '20px',
+        border: '2px blue solid'
+      };
+    
 
-    const style = transform ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      } : undefined;
-
-    return(
-        <div ref={setNodeRef} className={styles.container} style={style} {...listeners} {...attributes}>
-            {exercise}
-        </div>
-    )
+    if (!editMode){
+        return(
+            <div style={{padding: '20px', border: '2px blue solid'}}>
+                {exercise.name}
+            </div>
+        )
+    } else {
+        return(
+            <div style={style} {...attributes} {...listeners} ref={setNodeRef} >
+                {exercise.name} Scroll me
+            </div>
+        )
+    }
 }
 
 export default Exercise;

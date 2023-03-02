@@ -1,0 +1,10 @@
+.wrapper {
+    /*This part is important for centering*/
+    display: inline-flex;
+}
+  
+.typewriter{
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: '1em'
+}

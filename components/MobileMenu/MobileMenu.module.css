@@ -1,0 +1,14 @@
+.container{
+    display: flex;
+    height: 2rem;
+    justify-content: space-evenly;
+}
+
+.container > li{
+    border: 1px red solid;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

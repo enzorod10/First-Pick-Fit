@@ -4,3 +4,19 @@
     margin: 0px;
     list-style: none;
 }
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+@keyframes typing {
+    from {
+        width: 0
+    }
+}
+
+@media screen and (min-width: 600px) {
+    
+}

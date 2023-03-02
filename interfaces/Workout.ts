@@ -1,7 +1,9 @@
-import ActiveExercise from "./ActiveExercise"
+import AllocatedExercise from "./AllocatedExercise"
 
 export default interface Workout{
     name: string;
-    exercises: ActiveExercise[];
-    complete?: boolean
+    exercises: AllocatedExercise[];
+    areasTargeted: [];
+    complete?: boolean;
+    id: string;
 }

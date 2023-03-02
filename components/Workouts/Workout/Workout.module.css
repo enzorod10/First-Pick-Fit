@@ -1,21 +1,67 @@
 .container{
+    display: flex;
+    flex-direction: column;
+}
+
+.workoutHeader{
+    all: unset;
+    display: flex;
+    justify-content: space-between;
+}
+
+.middleOfWorkoutHeader{
+    display: flex;
+    border: 1px red solid;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.middleOfWorkoutHeader > div{
+    border: 1px red solid;
+}
+
+.workoutEditor{
+    display: flex;
+}
+
+.exercises{
     border: 1px red solid;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    gap: 0.5rem;
+    padding: 0.5rem 0rem;
 }
 
-.workoutName{
-    align-self: center;
+.workoutExerciseContainer{
+    border: 1px red solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
 }
 
-.exercises,
+.workoutExerciseHandleAndInfo{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.workoutExerciseHandle{
+    cursor: grabbing; 
+}
+
+.workoutExerciseInfo{
+}
+
+.workoutExerciseSets{
+    font-size: 0.8rem;
+    padding-left: 1rem;
+}
+
 .areasTargeted{
     border: 1px red solid;
-    padding: 10px;
-}
-
-.areasTargeted{
     display: flex;
     justify-content: space-evenly;
 }

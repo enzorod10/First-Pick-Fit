@@ -1,45 +1,84 @@
 import styles from './Exercises.module.css'
 import { uid } from 'uid'
-import { useGetUserSavedExercisesQuery } from '../../redux/features/user/userApi'
+import { useGetUserSavedExercisesQuery, useChangeExercisesOrderMutation } from '../../redux/features/exercise/exerciseApi'
 import { userSlice } from '../../redux/features/user/userSlice'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import Exercise from './Exercise/Exercise'
-
+import { useEffect, useState } from 'react'
+import { DndContext, useDraggable } from '@dnd-kit/core'
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import { restrictToParentElement } from '@dnd-kit/modifiers'
+import ExerciseInterface from '../../interfaces/Exercise'
+import Router, { useRouter } from 'next/router'
 
 const Exercises = () => {
-    const { userId } = useSelector((state: RootState) => state[userSlice.name])
+    const { userId } = useSelector((state: RootState) => state[userSlice.name]);
+    const { data } = useGetUserSavedExercisesQuery(userId);
+    const [exercises, setExercises] = useState<Exercise[] | null>(null);
+    const [changeExerciseOrderMutation] = useChangeExercisesOrderMutation();
+    const [editMode, setEditMode] = useState(false);
 
-    const { data } = useGetUserSavedExercisesQuery(userId)
+    useEffect(() => {
+        if (data){
+            setExercises(data)
+        }
+    }, [data])
 
-    console.log(data)
+    function handleDragEndScrollEvent(event: any){
+        const {active, over} = event;
+    
+        if (active?.id !== over?.id && exercises) {
+            const oldIndex = exercises.findIndex(exercise => 'sortable-' + exercise.id === active?.id);
+            const newIndex = exercises.findIndex(exercise => 'sortable-' + exercise.id === over?.id);
+            setExercises((exercises: any) => {
+                return arrayMove(exercises, oldIndex, newIndex)
+            })
+            changeExerciseOrderMutation({userId, oldIndex, newIndex})
+        }
+    }
 
     return(
         <div className={styles.container}>
             <h2>
                 Exercises
             </h2>
-            {data && data.map(category => {
-                return(
-                    <div className={styles.category} key={uid()}> 
-                        <h3>{category.category}</h3>
-                        {category.types.map(type => {
+            <button onClick={() => setEditMode(editMode ? false : true)}>{editMode ? 'Currently: Edit Mode' : 'Currently: Drag Mode'}</button>
+            <ul>
+            {!editMode &&
+                exercises && exercises.map((exercise: Exercise) => {
+                    return(
+                    <DraggableExercise key={uid()} exercise={exercise}>
+                        <Exercise editMode={editMode} exercise={exercise} />
+                    </DraggableExercise>
+                    );
+                })
+            }
+            {editMode &&
+                exercises &&
+                <DndContext onDragEnd={handleDragEndScrollEvent} modifiers={[restrictToParentElement]}>
+                    <SortableContext items={exercises.map(exercise => 'sortable-' + exercise.id)} strategy={verticalListSortingStrategy}>
+                        {exercises.map((exercise: ExerciseInterface) => {
                             return(
-                                <ul className={styles.type} key={uid()}>
-                                    <h4>{type.type}</h4>
-                                    {type.exercises.map(exercise => {
-                                        return (
-                                            <Exercise key={uid()} exercise={exercise} />
-                                        )
-                                    })}
-                                </ul>
-                            )
+                                <Exercise key={uid()} editMode={editMode} exercise={exercise} />
+                            );
                         })}
-                    </div>
-                )
-            })}
-           
+                    </SortableContext>
+                </DndContext>}
+            </ul>
         </div>
+    )
+}
+
+const DraggableExercise = (props: any) => {
+    const {attributes, listeners, setNodeRef} = useDraggable({
+        id: props.exercise.id, data: { type: 'exercise', exercise: props.exercise, renderDragLayout: ({exercise}: { exercise: ExerciseInterface }) => <Exercise editMode={false} exercise={exercise} />  }
+    });
+
+    return (
+        <li ref={setNodeRef} className={styles.container} {...listeners} {...attributes}>
+            {props.children}
+        </li>
     )
 }
 

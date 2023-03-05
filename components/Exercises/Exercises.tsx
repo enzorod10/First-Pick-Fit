@@ -10,7 +10,6 @@ import { DndContext, useDraggable } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToParentElement } from '@dnd-kit/modifiers'
 import ExerciseInterface from '../../interfaces/Exercise'
-import Router, { useRouter } from 'next/router'
 
 const Exercises = () => {
     const { userId } = useSelector((state: RootState) => state[userSlice.name]);
@@ -76,7 +75,7 @@ const DraggableExercise = (props: any) => {
     });
 
     return (
-        <li ref={setNodeRef} className={styles.container} {...listeners} {...attributes}>
+        <li ref={setNodeRef} style={{touchAction: 'manipulation'}} className={styles.container} {...listeners} {...attributes}>
             {props.children}
         </li>
     )

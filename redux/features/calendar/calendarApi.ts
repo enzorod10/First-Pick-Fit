@@ -31,18 +31,29 @@ export const calendarApi = createApi({
                     const snapshot = await getDocs(collection(db, `user/${userId}/${monthAndYear}`))
 
                     let data: any;
+                    let olderDate: boolean = false
 
-                    if ((Number(monthAndYear.split('_')[1])  > currentYear) || ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && monthSelected > currentMonth))){
+                    if(snapshot.docs.length === 0){
+                        return { error: 'No Dates'}
+                    }
+
+                    if ((Number(monthAndYear.split('_')[1])  > currentYear) || ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && Number(monthSelected) > currentMonth))){
                         data = snapshot.docs.filter(snap => {
                             return snap.data()
                         })[0]
-                    } else {
-                        data = snapshot.docs.filter(snap => {
-                            return snap.data().date >= currentDate 
-                        })[0]
+                    } if ((Number(monthAndYear.split('_')[1])  < currentYear) || ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && Number(monthSelected) < currentMonth))){
+                        olderDate = true;
+                    } if ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && Number(monthSelected) === currentMonth)){
+                        data = snapshot.docs.reduce((prev, current) => prev.data().date < current.data().date && prev.data().date >= currentDate ? prev : current)
                     }
 
-                    if (!data) return { error: 'No upcoming workout for this month' }
+                    if (olderDate){
+                        return { error: 'Older date'}
+                    } 
+                    if (!data){
+                        return { error: 'No upcoming workout for this month' }
+                    }
+
                     
                     return { data: data.data() }
                 } else return { error: 'UserId Error' }

@@ -17,7 +17,6 @@ const Exercise = ( { exercise, editMode }: AppProps ) => {
         padding: '20px',
         border: '2px blue solid'
       };
-    
 
     if (!editMode){
         return(

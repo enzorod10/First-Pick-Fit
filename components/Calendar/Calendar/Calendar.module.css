@@ -1,4 +1,12 @@
 .container{
+    max-height: 1000px;
+    transition: 0.7s ease-out;
+}
+
+.condensed{
+    max-height: 0px;
+    opacity: 0;
+    visibility: hidden;
 }
 
 .nav{
@@ -26,6 +34,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
 }
+
 
 @media screen and (min-width: 600px) {
     .container{

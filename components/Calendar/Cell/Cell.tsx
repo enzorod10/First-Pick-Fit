@@ -10,17 +10,18 @@ interface AppProps{
     id: string,
     userId?: string,
     monthAndYear: string,
-    dateInfo?: { date: number, workout: Workout}
+    dateInfo?: { date: number, workout: Workout},
+    calendarExpanded: boolean
 }
 
-const Cell = ({ date, id, dateInfo, monthAndYear, userId }: AppProps) => {
+const Cell = ({ date, id, dateInfo, monthAndYear, userId, calendarExpanded}: AppProps) => {
     
-    return !date ? <div className={styles.undefinedCellContainer}> </div> : <CellWithDate date={date} userId={userId} id={id} dateInfo={dateInfo} monthAndYear={monthAndYear}/>
+    return !date ? <div className={styles.undefinedCellContainer}> </div> : <CellWithDate date={date} calendarExpanded={calendarExpanded} userId={userId} id={id} dateInfo={dateInfo} monthAndYear={monthAndYear}/>
     
 }
 
-const CellWithDate = ({ date, id, dateInfo, monthAndYear, userId }: AppProps) => {
-    const { isOver, setNodeRef } = useDroppable({ id });
+const CellWithDate = ({ date, id, dateInfo, monthAndYear, userId, calendarExpanded }: AppProps) => {
+    const { isOver, setNodeRef } = useDroppable({ id, data: { type: 'cell' }, disabled: !calendarExpanded });
     const style = isOver ? { backgroundColor: 'red'} : {};
     const dispatch = useDispatch();    
 

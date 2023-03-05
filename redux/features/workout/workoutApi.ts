@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../../firebase/clientApp';
 import AllocatedExercise from '../../../interfaces/AllocatedExercise';
 import Exercise from '../../../interfaces/Exercise';
@@ -10,6 +10,14 @@ export const workoutApi = createApi({
     baseQuery: fakeBaseQuery(),
     tagTypes: ['Workout', 'WorkoutExercise'],
     endpoints: (builder) => ({
+        createUserWorkout: builder.mutation<null, { userId: string | undefined, workout: Workout }>({
+            async queryFn({ userId, workout }){
+                if (userId){
+                    await updateDoc(doc(db, `user`, userId), { savedExercises: arrayUnion(workout) } )
+                    return { data: null }
+                } else return { error: 'Error' }
+            },
+        }),
         getUserSavedWorkouts: builder.query<Workout[], undefined | string>({
             async queryFn(userId){
                 if (userId){
@@ -92,4 +100,4 @@ export const workoutApi = createApi({
     })
 })
 
-export const { useGetUserSavedWorkoutsQuery, useAddUserSavedWorkoutExerciseMutation, useChangeWorkoutExercisesOrderMutation, useDeleteUserSavedWorkoutExerciseMutation } = workoutApi; 
+export const { useCreateUserWorkoutMutation, useGetUserSavedWorkoutsQuery, useAddUserSavedWorkoutExerciseMutation, useChangeWorkoutExercisesOrderMutation, useDeleteUserSavedWorkoutExerciseMutation } = workoutApi; 

@@ -1,6 +1,9 @@
-import styles from './Workout.module.css'
+import styles from './MobileWorkout.module.css'
 import { useAddUserSavedWorkoutExerciseMutation, useChangeWorkoutExercisesOrderMutation, useDeleteUserSavedWorkoutExerciseMutation } from '../../../redux/features/workout/workoutApi';
 import { uid } from 'uid'
+import { useSelector } from 'react-redux'
+import { userSlice } from '../../../redux/features/user/userSlice';
+import { RootState } from '../../../store';
 import Workout from '../../../interfaces/Workout';
 import { useDraggable } from "@dnd-kit/core";
 import {
@@ -10,14 +13,8 @@ import {
     DragEndEvent,
   } from '@dnd-kit/core';
   import {
-    arrayMove,
-    SortableContext,
     useSortable,
-    verticalListSortingStrategy,
   } from '@dnd-kit/sortable';
-  import {
-    restrictToParentElement
-  } from '@dnd-kit/modifiers';
   import {
     CSS
   } from '@dnd-kit/utilities';
@@ -26,14 +23,13 @@ import AllocatedExercise from '../../../interfaces/AllocatedExercise';
 
 interface AppProps{
     workout: Workout;
-    userId: string | undefined;
+    displayWorkout: (workout?: Workout) => void;
 }
 
-const Workout = ( { workout, userId }: AppProps) => {
+const MobileWorkout = ( { workout, displayWorkout }: AppProps) => {
+    const { userId } = useSelector((state: RootState) => state[userSlice.name]);
     const { isOver, setNodeRef } = useDroppable({ id: workout.id, data: { type: 'workoutExercisesContainer' } });
     const [addUserSavedWorkoutExercise] = useAddUserSavedWorkoutExerciseMutation();
-    const [ changeWorkoutExercisesOrderMutation ] = useChangeWorkoutExercisesOrderMutation();
-    const [ workoutExercises, setWorkoutExercises ] = useState<AllocatedExercise[]>(workout.exercises)
 
     const style = {
         backgroundColor: isOver ? 'green' : undefined,
@@ -48,35 +44,10 @@ const Workout = ( { workout, userId }: AppProps) => {
         }
     })
 
-    function handleDragEndScrollEvent(event: any){
-        const {active, over} = event;
-    
-        if (active?.id !== over?.id && workoutExercises) {
-            const oldIndex = workoutExercises.findIndex(exercise => exercise.id === active?.id);
-            const newIndex = workoutExercises.findIndex(exercise => exercise.id === over?.id);
-            setWorkoutExercises((exercises: any) => {
-                return arrayMove(exercises, oldIndex, newIndex)
-            })
-            changeWorkoutExercisesOrderMutation({userId, workoutId: workout.id, oldIndex, newIndex})
-        }
-    }
-
     return(
-        <div className={styles.container}>
-            <ul className={styles.exercises} ref={setNodeRef} style={style}>
-                {workoutExercises && 
-                <DndContext modifiers={[restrictToParentElement]} onDragEnd={handleDragEndScrollEvent}>
-                    <SortableContext items={workoutExercises.map(exercise => exercise.id)} strategy={verticalListSortingStrategy}>
-                        {workoutExercises.map(exercise => {
-                            return (
-                                <WorkoutExercise key={uid()} exercise={exercise} userId={userId} workoutId={workout.id} />
-                            )
-                        })}
-                    </SortableContext>
-                </DndContext>}
-            </ul>
-            <h4> Areas Targeted</h4>
+        <div onClick={() => displayWorkout(workout)} className={styles.container}>
             <ul className={styles.areasTargeted}>
+                {workout.name}
                 {workout.areasTargeted.map(area => {
                     return (
                         <li key={uid()}> {area} </li>
@@ -88,35 +59,31 @@ const Workout = ( { workout, userId }: AppProps) => {
     )
 }
 
-export const DraggableWorkout = (props: any) => {
+export const MobileDraggableWorkout = (props: any) => {
     const {attributes, listeners, setNodeRef} = useDraggable({
         id: props.workout.id, data: { type: 'workout', workout: props.workout, renderDragLayout: ({workout} : {workout: Workout}) => <div >  hello</div> }
     });
 
     return (
-        <li ref={setNodeRef} style={{touchAction: 'manipulation'}} {...attributes}>
-            <header className={styles.workoutHeader}>
-                <div className={styles.workoutName}> Chest Day </div>
-                <div className={styles.middleOfWorkoutHeader}>
-                    <div>
-                        {`\<`}
-                    </div>
-                    <div {...listeners}> ... </div>
-                    <div>
-                        {`\>`}
-                    </div>
-                </div>
-                <ul className={styles.workoutEditor}>
-                    <li>Edit</li>
-                    <li>All</li>
-                </ul>
-            </header>
+        <div ref={setNodeRef} style={{touchAction: 'manipulation'}} {...attributes}>
+            <div {...listeners}>
+            drag handle   
+            </div>
             {props.children}
-        </li>
+        </div>
     )
 }
 
-const WorkoutExercise = ({ exercise, userId, workoutId}: { exercise: AllocatedExercise, userId: string | undefined, workoutId: string }) => {
+export const MobileIndividualWorkout = ({ workout, displayWorkout }: AppProps) => {
+    return(
+        <div>
+            <div onClick={() => displayWorkout()}>Go back</div>
+            Workout Name
+        </div>
+    )
+}
+
+const MobileWorkoutExercise = ({ exercise, userId, workoutId}: { exercise: AllocatedExercise, userId: string | undefined, workoutId: string }) => {
     const [deleteUserSavedWorkoutExercise] = useDeleteUserSavedWorkoutExerciseMutation();
     const { listeners, attributes, setNodeRef, transform, transition } = useSortable( { id: exercise.id } );
 
@@ -146,4 +113,4 @@ const WorkoutExercise = ({ exercise, userId, workoutId}: { exercise: AllocatedEx
     )
 }
 
-export default Workout;
+export default MobileWorkout;

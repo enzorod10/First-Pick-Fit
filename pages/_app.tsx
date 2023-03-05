@@ -36,15 +36,18 @@ export default function App({ Component, pageProps, ...appProps }: AppProps) {
   });
 
   const mouseSensor = useSensor(MouseSensor);
-  const touchSensor = useSensor(TouchSensor);
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5
+    }
+  });
   const keyboardSensor = useSensor(KeyboardSensor);
-  const pointerSensor = useSensor(PointerSensor);
   
   const sensors = useSensors(
     mouseSensor,
     touchSensor,
     keyboardSensor,
-    pointerSensor
   );
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -65,7 +68,7 @@ export default function App({ Component, pageProps, ...appProps }: AppProps) {
         {(['/signup', '/login']).includes(appProps.router.pathname) ?
           <Component {...pageProps} /> :
           <Layout windowSize={windowSize}>
-            <Component {...pageProps} />
+            <Component {...pageProps} windowSize={windowSize}/>
           </Layout>}
         <DragOverlay>
           {

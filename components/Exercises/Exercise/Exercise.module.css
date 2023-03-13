@@ -1,4 +1,39 @@
 .container{
-    border: 2px red solid;
-    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    justify-content: space-between;
+    border-radius: 2px;
+    border: 1px var(--charcoal) solid;
+    color: var(--charcoal);
+}
+
+.areasTargeted{
+    display: flex;
+    overflow-x: auto;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.areasTargeted > li{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+    min-width: fit-content;
+}
+
+.areasTargeted > li > img{
+    border: 1px var(--charcoal) solid;
+    border-radius: 5px;
+    padding: 3px;
+    pointer-events: none;
+}
+
+.areasTargeted > li > p{
+    font-size: 0.6rem;
+    font-style: italic;
+    color: var(--charcoal);
 }

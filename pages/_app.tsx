@@ -10,7 +10,6 @@ import { auth } from '../firebase/clientApp'
 import {
   DndContext, 
   KeyboardSensor,
-  PointerSensor,
   useSensor,
   useSensors,
   MouseSensor,
@@ -22,10 +21,19 @@ import {
 import {
   restrictToWindowEdges
 } from '@dnd-kit/modifiers'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 export default function App({ Component, pageProps, ...appProps }: AppProps) {
   const [activeElement, setActiveElement] = useState<any>(null)
+
+  useEffect(() => {
+    const resizer = () => {
+      document.body.style.height = window.innerHeight + "px";
+  }
+    document.body.style.height = window.innerHeight + "px";
+    window.addEventListener("resize", (_e) => resizer());
+  }, [])
 
   onAuthStateChanged(auth, (user) => {
     if (user){
@@ -35,7 +43,12 @@ export default function App({ Component, pageProps, ...appProps }: AppProps) {
     }
   });
 
-  const mouseSensor = useSensor(MouseSensor);
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5
+    }
+  });
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
       delay: 250,
@@ -62,14 +75,19 @@ export default function App({ Component, pageProps, ...appProps }: AppProps) {
 
   const windowSize = useWindowSize()
 
-  return (
+  return (    
     <Provider store={store}>
+      <Head>
+        <meta name="keywords" content="fitness, tracker, workouts, exercises" />
+        <meta name="author" content="Enzo Rodriguez" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      </Head>
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        {(['/signup', '/login']).includes(appProps.router.pathname) ?
-          <Component {...pageProps} /> :
-          <Layout windowSize={windowSize}>
-            <Component {...pageProps} windowSize={windowSize}/>
-          </Layout>}
+        {(['/dashboard', '/workouts', '/exercises']).includes(appProps.router.pathname) ?
+        <Layout windowSize={windowSize}>
+          <Component {...pageProps} windowSize={windowSize}/>
+        </Layout> :
+        <Component {...pageProps} />}
         <DragOverlay>
           {
             activeElement && activeElement?.data?.current.renderDragLayout?.(activeElement.data.current)

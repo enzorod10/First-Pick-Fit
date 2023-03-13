@@ -1,6 +1,10 @@
 .container{
     max-height: 1000px;
     transition: 0.7s ease-out;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.5rem 0rem 0.5rem;
+    color: var(--charcoal);
 }
 
 .condensed{
@@ -12,6 +16,7 @@
 .nav{
     display: flex;
     font-size: 1rem;
+    color: var(--oxford-blue);
     height: 2rem;
     align-items: center;
 }
@@ -27,7 +32,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px blue solid;
+    color: var(--oxford-blue);
+    font-size: 0.9rem;
 }
 
 .innerContainer{

@@ -3,30 +3,51 @@
     padding: 0px;
     margin: 0px;
     list-style: none;
+    --oxford-blue: #011936;
+    --charcoal: #465362;
+    --cambridge-blue: #82A3A1;
+    --olivine: #9FC490;
+    --tea-green: #C0DFA1;
+}
+
+@font-face {
+    font-family: Roboto Regular;
+    src: url('/fonts/Roboto-Regular.ttf');
 }
 
 .dashboard{
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    overflow: hidden;
+    padding-top: 0.5rem;
 }
 
 body{
     overflow: hidden;
-    height: calc(100vh - constant(safe-area-inset-top)); /* for iOS devices with notch */
-    height: calc(100vh - env(safe-area-inset-top)); /* for iOS devices without notch */
+    font-family: Roboto Regular, sans-serif;
 }
 
 #__next{
     height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
-@keyframes typing {
-    from {
-        width: 0
-    }
+/* Login Page Section */
+
+.loginPage{
+    color: var(--charcoal);
+    user-select: none;
 }
 
+.loginPage button{
+    border: none;
+    cursor: pointer;
+}
+
+/* Login Page Section */
 @media screen and (min-width: 600px) {
     
 }

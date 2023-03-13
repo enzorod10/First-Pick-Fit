@@ -69,7 +69,7 @@ const Workout = ( { workout, userId }: AppProps) => {
                     <SortableContext items={workoutExercises.map(exercise => exercise.id)} strategy={verticalListSortingStrategy}>
                         {workoutExercises.map(exercise => {
                             return (
-                                <WorkoutExercise key={uid()} exercise={exercise} userId={userId} workoutId={workout.id} />
+                                <WorkoutExercise key={exercise.id} exercise={exercise} userId={userId} workoutId={workout.id} />
                             )
                         })}
                     </SortableContext>
@@ -79,7 +79,7 @@ const Workout = ( { workout, userId }: AppProps) => {
             <ul className={styles.areasTargeted}>
                 {workout.areasTargeted.map(area => {
                     return (
-                        <li key={uid()}> {area} </li>
+                        <li key={area.id}> {area} </li>
                     )
                 })}
             </ul>

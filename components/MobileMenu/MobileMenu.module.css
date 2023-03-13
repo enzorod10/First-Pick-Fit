@@ -1,15 +1,43 @@
 .container{
     display: flex;
-    height: 10%;
     justify-content: space-evenly;
+    min-height: 60px;
 }
 
 .container > li{
-    border: 1px red solid;
+    border-top: 1px var(--charcoal) solid;
     height: 100%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    color: var(--oxford-blue);
+    font-weight: bold;
+}
+
+.active{
+    position: relative;
+}
+
+.active:after{
+    animation: 0.5s 1 borderBottomExpand;
+    content: '';
+    display: block;
+    background-color: var(--oxford-blue);
+    bottom: -4px;
+    height: 1px;
+    width: 100%;
+    position: absolute;
+}
+
+@keyframes borderBottomExpand {
+    0% {
+        clip-path: polygon(0% 100%,0% 0,0% 0,0% 100%);
+        -webkit-clip-path: polygon(50% 100%,50% 0,50% 0,50% 100%);
+       }
+    100% {
+        clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
+        -webkit-clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
+    }
 }

@@ -9,14 +9,15 @@ import { RootState } from '../store';
 const Layout = ( { children, windowSize }: { children: React.ReactNode, windowSize: { width: number | undefined, height: number | undefined } } ) => {
     const { userId } = useSelector((state: RootState) => state[userSlice.name])
 
+
     return(
         <>
             <Head>
-                <title>Create Next</title>
+                <title>{children ? (children as any)?.type?.name + ' - First Pick Fit' : 'First Pick Fit'}</title>
             </Head>
-            {windowSize.width && windowSize.width <= 600 && <MobileMenu />}
             <Calendar windowSize={windowSize} userId={userId}/>
             { children }
+            {windowSize.width && windowSize.width <= 600 && <MobileMenu />}
         </>
         
     )

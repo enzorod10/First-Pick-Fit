@@ -6,6 +6,7 @@ import { useSignInWithEmailAndPasswordMutation } from '../redux/features/auth/au
 import { userSlice } from '../redux/features/user/userSlice'
 import { RootState } from '../store'
 import ExercisesComponent from '../components/Exercises/Exercises'
+import Head from 'next/head'
 
 export default function Exercises() {
     return (

@@ -18,7 +18,7 @@ const Workouts = ({ windowSize }: { windowSize: { width: number | undefined, hei
             {windowSize.width && windowSize.width >= 600 ?
             data && data.map((workout: Workout) => {
                 return (
-                    <DraggableWorkout key={uid()} workout={workout}>
+                    <DraggableWorkout key={workout.id} workout={workout}>
                         <Workout workout={workout} userId={userId}/>
                     </DraggableWorkout>
                 )

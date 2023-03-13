@@ -1,10 +1,49 @@
-.wrapper {
-    /*This part is important for centering*/
-    display: inline-flex;
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 100%;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    overflow-y: auto;
+    color: var(--charcoal);
 }
-  
-.typewriter{
-    white-space: nowrap;
-    overflow: hidden;
-    font-size: '1em'
+
+.workoutContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px var(--charcoal) solid;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: 2px;
+}
+
+.areasTargeted{
+    display: flex;
+    overflow-x: auto;
+    gap: 0.5rem;
+    position: relative;
+    justify-content: space-evenly;
+}
+
+.areasTargeted > li{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+    min-width: fit-content;
+}
+
+.areasTargeted > li > img{
+    border: 1px var(--charcoal) solid;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.areasTargeted > li > p{
+    font-size: 0.6rem;
+    font-style: italic;
+    color: var(--charcoal);
 }

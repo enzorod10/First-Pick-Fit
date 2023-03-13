@@ -1,8 +1,8 @@
 import Exercise from "./Exercise";
-import Set from "./Set";
+import SetBlock from "./SetBlock";
 
 export default interface AllocatedExercise extends Exercise{
-    sets: Set[];
+    sets: SetBlock[];
     complete?: boolean;
     notes?: string;
 }

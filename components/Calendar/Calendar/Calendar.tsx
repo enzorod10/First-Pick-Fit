@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import styles from './Calendar.module.css';
 import Cell from "../Cell/Cell";
 import { DateTime } from 'luxon';
-import { uid } from "uid";
 import { useGetUserMonthWorkoutsQuery, useAddUserWorkoutToMonthWorkoutsMutation } from "../../../redux/features/calendar/calendarApi";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from '../../../store';
@@ -84,10 +83,10 @@ const Calendar = ( { windowSize, userId }: { windowSize: { width: number | undef
             </div>
             <div className={styles.innerContainer}>
                 {daysOfTheWeek.map(day => {
-                    return <div key={uid()} className={styles.day}> {day} </div>
+                    return <div key={day} className={styles.day}> {day} </div>
                 })}
-                {monthMapped?.map((cell) => {
-                    return ( <Cell key={uid()} dateInfo={cell && data && data[cell.date]} userId={userId} id={`date-${cell?.date}`} date={cell?.date} monthAndYear= {`${monthsOfTheYear[((monthSelected - 1) % 12 + 12) % 12].toLowerCase()}_${yearSelected}`} calendarExpanded={calendarExpanded}/>)
+                {monthMapped?.map((cell, index) => {
+                    return ( <Cell key={cell ? cell.date : 0 - index} dateInfo={cell && data && data[cell.date]} userId={userId} id={`date-${cell?.date}`} date={cell?.date} monthAndYear= {`${monthsOfTheYear[((monthSelected - 1) % 12 + 12) % 12].toLowerCase()}_${yearSelected}`} calendarExpanded={calendarExpanded}/>)
                 })}
             </div>
         </div>

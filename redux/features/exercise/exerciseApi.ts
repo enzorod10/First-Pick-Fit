@@ -16,7 +16,8 @@ export const exerciseApi = createApi({
                 return { data }
                 } else return { error: 'Error' }
             },
-            providesTags: ['Exercise']
+            providesTags: (result) =>
+            (result && result.length > 0) ? result.map(({ id }) => ({ type: 'Exercise' as const, id })) : ['Exercise'],
         }),
         changeExercisesOrder: builder.mutation<null, { userId: undefined | string, oldIndex: number, newIndex: number}>({
             async queryFn( { userId, oldIndex, newIndex }){
@@ -32,19 +33,38 @@ export const exerciseApi = createApi({
                 }
             }
         }),
-        addUserSavedExercise: builder.mutation<null, { userId: undefined | string, oldIndex: number, newIndex: number}>({
-            async queryFn( { userId, oldIndex, newIndex }){
+        addUserSavedExercise: builder.mutation<null, { userId: undefined | string, exercise: Exercise }>({
+            async queryFn( { userId, exercise }){
                 if (userId){
-                    const exercise: {} = {}
-                    await updateDoc(doc(db, `user`, userId), { savedExercises: arrayUnion(exercise) } )
+                    const snapshot = await getDoc(doc(db, 'user', `${userId}`));
+                    const data = snapshot.data()?.savedExercises
+                    data.unshift(exercise)                  
+                    await updateDoc(doc(db, `user`, userId), { savedExercises: data } )
 
                     return { data: null }
                 } else {
                     return { error: 'Error'}
                 }
-            }
+            },
+            invalidatesTags: ['Exercise']
+        }),
+        deleteUserSavedExercise: builder.mutation<null, { userId: undefined | string, exerciseId: string }>({
+            async queryFn( { userId, exerciseId }){
+                if (userId){
+                    console.log(userId, exerciseId)
+                    const snapshot = await getDoc(doc(db, 'user', `${userId}`));
+                    const data = snapshot.data()?.savedExercises
+                    await updateDoc(doc(db, `user`, userId), { savedExercises: data.filter((exercise: Exercise) => exercise.id !== exerciseId) } )
+                    console.log('deleted')
+
+                    return { data: null }
+                } else {
+                    return { error: 'Error'}
+                }
+            },
+            invalidatesTags: (result, error, {exerciseId}) => [{ type: 'Exercise', id: exerciseId }]
         }),
     })
 })
 
-export const { useGetUserSavedExercisesQuery, useChangeExercisesOrderMutation } = exerciseApi; 
+export const { useGetUserSavedExercisesQuery, useChangeExercisesOrderMutation, useAddUserSavedExerciseMutation, useDeleteUserSavedExerciseMutation } = exerciseApi; 

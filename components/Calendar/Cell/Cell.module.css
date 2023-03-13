@@ -1,11 +1,13 @@
 .undefinedCellContainer,
 .definedCellContainer{
-    border: 1px blue solid;
+    border: 1px #0119364a solid;
+    margin: 0.4px;
     height: 2rem;
+    padding: 0.09rem 0.18rem;
 }
 
 .definedCellContainer{
-    font-size: 0.8em;
+    font-size: 0.7em;
 }
 
 .deleteButton{
@@ -18,4 +20,3 @@
         display: flex;
     }
 }
-

@@ -8,7 +8,7 @@ import Workout from '../../../interfaces/Workout';
 export const calendarApi = createApi({
     reducerPath: 'calendarApi',
     baseQuery: fakeBaseQuery(),
-    tagTypes: ['Day'], 
+    tagTypes: ['Month', 'Day'], 
     endpoints: (builder) => ({
         getUserMonthWorkouts: builder.query<{ [key: number]: { date: number, workout: Workout } }, { userId: string | undefined, monthAndYear: string, arrayOfMonth: number[] | undefined}>({
             async queryFn( { userId, monthAndYear, arrayOfMonth }){
@@ -23,7 +23,7 @@ export const calendarApi = createApi({
                     return { data }
                 } else return { error: 'Error' }
             },
-            providesTags: (result, error, { arrayOfMonth }):any => arrayOfMonth ? arrayOfMonth.map(elem => ({ type: 'Day', id: elem })) : ['Day']
+            providesTags: (result, error, { arrayOfMonth, monthAndYear }):any => result ?  [...Object.values(result).map( ({ date }) => ({ type: 'Day' as const, id: date })), {type: 'Month', id: monthAndYear.split('_')[0]}] : ['Month']
         }),
         getUserNextWorkout: builder.query<any, { userId: string | undefined, monthAndYear: string, currentDate: number, currentMonth: number, monthSelected: number | null, currentYear: number }>({
             async queryFn( { userId, monthAndYear, currentDate, currentMonth, monthSelected, currentYear }){
@@ -33,10 +33,6 @@ export const calendarApi = createApi({
                     let data: any;
                     let olderDate: boolean = false
 
-                    if(snapshot.docs.length === 0){
-                        return { error: 'No Dates'}
-                    }
-
                     if ((Number(monthAndYear.split('_')[1])  > currentYear) || ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && Number(monthSelected) > currentMonth))){
                         data = snapshot.docs.filter(snap => {
                             return snap.data()
@@ -44,20 +40,23 @@ export const calendarApi = createApi({
                     } if ((Number(monthAndYear.split('_')[1])  < currentYear) || ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && Number(monthSelected) < currentMonth))){
                         olderDate = true;
                     } if ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && Number(monthSelected) === currentMonth)){
-                        data = snapshot.docs.reduce((prev, current) => prev.data().date < current.data().date && prev.data().date >= currentDate ? prev : current)
+                        let orderedWorkouts = snapshot.docs.sort((a, b) => a.data().date - b.data().date)
+                        data = orderedWorkouts.find(workout => workout.data().date >= currentDate)
                     }
 
                     if (olderDate){
                         return { error: 'Older date'}
-                    } 
+                    }
                     if (!data){
                         return { error: 'No upcoming workout for this month' }
                     }
-
-                    
+                    if(snapshot.docs.length === 0){
+                        return { error: 'No Dates'}
+                    }
                     return { data: data.data() }
                 } else return { error: 'UserId Error' }
             },
+            providesTags: (result, err, { monthAndYear }) => [{ type: 'Month', id: monthAndYear.split('_')[0] }]
         }),
         getClickedOnDate: builder.query<any, { userId: string | undefined, monthAndYear: string, dateClicked: number | null }>({
             async queryFn( { userId, monthAndYear, dateClicked }){
@@ -66,12 +65,14 @@ export const calendarApi = createApi({
                     const data = snapshot.docs.find(snap => {
                         return snap.data().date === dateClicked 
                     })
+                    console.log(data)
                     
                     if (!data) return { error: 'Clicked date has no workout' }
 
                     return { data: data.data() }
                 } else return { error: 'UserId Error' }
             },
+            providesTags: (result, err, { monthAndYear, dateClicked }): any => [{ type: 'Month' as const, id: monthAndYear.split('_')[0] }, { type: 'Day' as const, id: dateClicked}]
         }),
         deleteUserWorkoutFromMonthWorkouts: builder.mutation<null,  { userId: string | undefined, monthAndYear: string, date: number }>({
             async queryFn({ userId, monthAndYear, date }){
@@ -80,8 +81,8 @@ export const calendarApi = createApi({
                     return { data: null }
                 } else return { error: 'Error'}
             },
-            invalidatesTags: (result, error, { date}) => {
-                return [{ type: 'Day', date }]
+            invalidatesTags: (result, error, { date, monthAndYear }) => {
+                return [{ type: 'Day', id: date }, { type: 'Month', id: monthAndYear.split('_')[0]} ]
             }
         }),
         addUserWorkoutToMonthWorkouts: builder.mutation<null,  { userId: string | undefined, monthAndYear: string, date: number, workout: Workout }>({
@@ -91,8 +92,8 @@ export const calendarApi = createApi({
                     return { data: null }
                 } else return { error: 'Error'}
             },
-            invalidatesTags: (result, error, { date }) => {
-                return [{ type: 'Day', date }]
+            invalidatesTags: (result, error, { monthAndYear, date }) => {
+                return [{ type: 'Day', id: date }, { type: 'Month', id: monthAndYear.split('_')[0]} ]
             }
         }),
 

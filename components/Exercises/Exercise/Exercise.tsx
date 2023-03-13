@@ -2,35 +2,50 @@ import styles from './Exercise.module.css';
 import Exercise from '../../../interfaces/Exercise';
 import { useSortable } from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
+import Image from 'next/image';
+import { useDeleteUserSavedExerciseMutation } from '../../../redux/features/exercise/exerciseApi';
 
 interface AppProps{
     exercise: Exercise;
-    editMode: boolean;
+    userId: string | undefined;
 }
 
-const Exercise = ( { exercise, editMode }: AppProps ) => {
+const Exercise = ( { exercise, userId }: AppProps ) => {
     const { listeners, attributes, setNodeRef, transform, transition } = useSortable( { id: 'sortable-' + exercise.id } );
+    const [deleteUserSavedExercise] = useDeleteUserSavedExerciseMutation();
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        padding: '20px',
-        border: '2px blue solid'
-      };
+        touchAction: 'manipulation',
+    };
 
-    if (!editMode){
-        return(
-            <div style={{padding: '20px', border: '2px blue solid'}}>
-                {exercise.name}
+    return(
+        <div className={styles.container} style={style} {...attributes} {...listeners} ref={setNodeRef} >
+            <div style={{display: 'flex', alignItems:'center', gap: '0.5rem'}}>
+                <Image style={{pointerEvents: 'none'}} src='/images/icons/scroll.png' alt='scroll' width='16' height='16'/>
+                <div>
+                    <div style={{fontSize: '0.8rem',}}>
+                        {exercise.name}
+                    </div>
+                    <div style={{fontSize: '0.7rem', display: 'flex', width: 'fit-content'}}>
+                        <span onClick={() => deleteUserSavedExercise({userId, exerciseId: exercise.id})}>Remove</span>
+                    </div>
+                </div>
             </div>
-        )
-    } else {
-        return(
-            <div style={style} {...attributes} {...listeners} ref={setNodeRef} >
-                {exercise.name} Scroll me
-            </div>
-        )
-    }
+            {exercise.areasTargeted && 
+            <ul className={styles.areasTargeted}>
+                {exercise.areasTargeted.map(areaTargeted => {
+                    return (
+                        <li key={areaTargeted.id}>
+                            <Image src={`/images/muscle-parts/${areaTargeted.name}.png`} alt={`${areaTargeted.name}`} width='30' height='30' />
+                            <p>{areaTargeted.name}</p>
+                        </li>
+                    )
+                })}
+            </ul>}
+        </div>
+    )
 }
 
 export default Exercise;

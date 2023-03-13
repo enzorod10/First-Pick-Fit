@@ -10,14 +10,6 @@ export const workoutApi = createApi({
     baseQuery: fakeBaseQuery(),
     tagTypes: ['Workout', 'WorkoutExercise'],
     endpoints: (builder) => ({
-        createUserWorkout: builder.mutation<null, { userId: string | undefined, workout: Workout }>({
-            async queryFn({ userId, workout }){
-                if (userId){
-                    await updateDoc(doc(db, `user`, userId), { savedExercises: arrayUnion(workout) } )
-                    return { data: null }
-                } else return { error: 'Error' }
-            },
-        }),
         getUserSavedWorkouts: builder.query<Workout[], undefined | string>({
             async queryFn(userId){
                 if (userId){
@@ -27,7 +19,48 @@ export const workoutApi = createApi({
                 } else return { error: 'Error' }
             },
             providesTags: (result) =>
-                result ? result.reduce((acc: any, workout: Workout) => [ ...acc, { type: 'Workout', id: workout.id }, ...workout.exercises.map((exercise: AllocatedExercise) => ({ type: 'WorkoutExercise', id: exercise.id }))], []) : ['Workout'],
+                (result && result.length > 0) ? result.reduce((acc: any, workout: Workout) => [ ...acc, { type: 'Workout', id: workout.id }, ...workout.exercises.map((exercise: AllocatedExercise) => ({ type: 'WorkoutExercise', id: exercise.id }))], []) : [{ type: 'Workout' }, { type: 'WorkoutExercise' }],
+        }),
+        createUserWorkout: builder.mutation<null, { userId: string | undefined, workout: Workout }>({
+            async queryFn({ userId, workout }){
+                if (userId){
+                    const snapshot = await getDoc(doc(db, 'user', `${userId}`));
+                    let data = snapshot.data()?.savedWorkouts
+                    data.unshift(workout);
+                    await updateDoc(doc(db, `user`, userId), { savedWorkouts: data } )
+                    return { data: null }
+                } else return { error: 'Error' }
+            },
+            invalidatesTags: (result, error, { workout }) => [{ type: 'Workout', id: workout.id }, { type: 'WorkoutExercise' }]
+        }),
+        editUserWorkout: builder.mutation<null, { userId: string | undefined, workout: Workout }>({
+            async queryFn({ userId, workout }){
+                if (userId){
+                    const snapshot = await getDoc(doc(db, 'user', `${userId}`));
+                    let data = snapshot.data()?.savedWorkouts
+                    
+                    await updateDoc(doc(db, `user`, userId), { savedWorkouts: data.map((userWorkout: Workout) => {
+                        if (userWorkout.id === workout.id){
+                            return workout
+                        }
+                        return userWorkout
+                    })});
+                    return { data: null }
+                } else return { error: 'Error' }
+            },
+            invalidatesTags: (result, error, { workout }) => [{ type: 'Workout', id: workout.id }, { type: 'WorkoutExercise' }]
+        }),
+        deleteUserWorkout: builder.mutation<null, { userId: string | undefined, workoutId: string }>({
+            async queryFn({ userId, workoutId }){
+                if (userId){
+                    const snapshot = await getDoc(doc(db, 'user', `${userId}`));
+                    let data = snapshot.data()?.savedWorkouts
+
+                    await updateDoc(doc(db, `user`, userId), { savedWorkouts: data.filter((userWorkout: Workout) => workoutId !== userWorkout.id )});
+                    return { data: null }
+                } else return { error: 'Error' }
+            },
+            invalidatesTags: (result, error, { workoutId }) => [{ type: 'Workout', id: workoutId }, { type: 'WorkoutExercise' }]
         }),
         changeWorkoutExercisesOrder: builder.mutation<null, { userId: undefined | string, workoutId: string, oldIndex: number, newIndex: number}>({
             async queryFn( { userId, workoutId, oldIndex, newIndex }){
@@ -100,4 +133,4 @@ export const workoutApi = createApi({
     })
 })
 
-export const { useCreateUserWorkoutMutation, useGetUserSavedWorkoutsQuery, useAddUserSavedWorkoutExerciseMutation, useChangeWorkoutExercisesOrderMutation, useDeleteUserSavedWorkoutExerciseMutation } = workoutApi; 
+export const { useCreateUserWorkoutMutation, useEditUserWorkoutMutation, useDeleteUserWorkoutMutation, useGetUserSavedWorkoutsQuery, useAddUserSavedWorkoutExerciseMutation, useChangeWorkoutExercisesOrderMutation, useDeleteUserSavedWorkoutExerciseMutation } = workoutApi; 

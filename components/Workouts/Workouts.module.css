@@ -1,4 +1,110 @@
-.container{
+.workoutsContainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem 0.5rem 0rem 0.5rem;
     height: 100%;
-    overflow-y: hidden;
+}
+
+.workoutsInnerContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0rem 0.5rem 0.5rem 0.5rem;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.searchWorkoutNameAndButton{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0rem 0.5rem 0.5rem 0.5rem;
+}
+
+.workoutCreatorContainer{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    color: var(--oxford-blue);
+}
+
+.workoutExercisesCreatorContainer{
+    border-radius: 2px;
+    border: 2px var(--charcoal) dashed;
+    color: var(--charcoal);
+    height: 250px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    gap: 0.5rem;
+}
+
+.individualWorkoutExercises{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: space-between;
+    border: 1px var(--oxford-blue) solid;
+    padding: 0.5rem;
+    transition: opacity 0.4s ease-out;
+    border-radius: 2px;
+}
+
+.active{
+    opacity: 1 !important;
+}
+
+/* Exercises section of creator */
+
+.exercisesCreatorContainer{
+    padding: 0.5rem 1rem;
+    overflow: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.individualExercisesToDrag{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    border: 1px var(--oxford-blue) solid;
+    color: var(--charcoal);
+    width: 100%;
+    gap: 0.5rem;
+    border-radius: 2px;
+}
+
+.areasTargeted{
+    display: flex;
+    overflow-x: auto;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.areasTargeted > li{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+    min-width: fit-content;
+}
+
+.areasTargeted > li > img{
+    border: 1px var(--charcoal) solid;
+    border-radius: 5px;
+    padding: 3px;
+    pointer-events: none;
+}
+
+.areasTargeted > li > p{
+    font-size: 0.6rem;
+    font-style: italic;
+    color: var(--charcoal);
 }

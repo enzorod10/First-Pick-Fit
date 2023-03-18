@@ -31,8 +31,9 @@ export const exerciseApi = createApi({
                 } else {
                     return { error: 'Error'}
                 }
-            }
-        }),
+            },
+            invalidatesTags: ['Exercise']
+    }),
         addUserSavedExercise: builder.mutation<null, { userId: undefined | string, exercise: Exercise }>({
             async queryFn( { userId, exercise }){
                 if (userId){
@@ -51,11 +52,9 @@ export const exerciseApi = createApi({
         deleteUserSavedExercise: builder.mutation<null, { userId: undefined | string, exerciseId: string }>({
             async queryFn( { userId, exerciseId }){
                 if (userId){
-                    console.log(userId, exerciseId)
                     const snapshot = await getDoc(doc(db, 'user', `${userId}`));
                     const data = snapshot.data()?.savedExercises
                     await updateDoc(doc(db, `user`, userId), { savedExercises: data.filter((exercise: Exercise) => exercise.id !== exerciseId) } )
-                    console.log('deleted')
 
                     return { data: null }
                 } else {

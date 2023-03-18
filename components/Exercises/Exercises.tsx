@@ -15,10 +15,8 @@ import { Area } from '../../interfaces/AreaTargeted';
 import { useDispatch } from 'react-redux'
 import { setIsCalendarExpanded } from "../../redux/features/calendar/calendarSlice"
 
-const Exercises = () => {
-    const { userId } = useSelector((state: RootState) => state[userSlice.name]);
-    const { data } = useGetUserSavedExercisesQuery(userId);
-    const [exercises, setExercises] = useState<Exercise[] | null>(null);
+const Exercises = ( { data, userId, pageLoadingStatus }: {data: Exercise[], userId: string | undefined, pageLoadingStatus: boolean}) => {
+    const [exercises, setExercises] = useState<Exercise[] | null>(data);
     const [exerciseEditor, setExerciseEditor] = useState({ mode: 'none', data: { id: '', name: '', areasTargeted: [{ id: '', name: '' as Area }] } })
     const [addUserSavedExercise] = useAddUserSavedExerciseMutation();
     const [changeExerciseOrderMutation] = useChangeExercisesOrderMutation();
@@ -33,6 +31,7 @@ const Exercises = () => {
     const [search, setSearch] = useState('');
     const [searchedExercises, setSearchedExercises] = useState<ExerciseInterface[]>([]);
     const dispatch = useDispatch();
+    const [startup, setStartup]  = useState(false)
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
@@ -55,9 +54,11 @@ const Exercises = () => {
     );
 
     useEffect(() => {
-        if (data){
-            setExercises(data)
-        }
+        setTimeout(() => setStartup(true), 200)
+    }, [])
+
+    useEffect(() => {
+        setExercises(data);
     }, [data])
 
     useEffect(() => {
@@ -138,9 +139,9 @@ const Exercises = () => {
         setExerciseEditor({ mode: 'none', data: { id: '', name: '', areasTargeted: [{ id: '', name: '' as Area }] } });
         dispatch(setIsCalendarExpanded(true));
     }
-
+    
     return(
-        <ul className={styles.container}>
+        <ul className={styles.container} style={{opacity: (pageLoadingStatus || !startup) ? '0' : '1'}}>
             <div className={styles.searchExerciseNameAndButton} style={{display: 'flex', justifyContent: 'space-between'}}>
                 <input type="text" placeholder='Search Exercises...' value={search} onChange={e => setSearch(e.target.value)} style={{all: 'unset', fontSize: '0.9rem', width: '100%' }}/>
                 {exerciseEditor.mode === 'none' && <button style={{ padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => (setExerciseEditor({ ...exerciseEditor, mode: 'create' }), dispatch(setIsCalendarExpanded(false)) )} >New Exercise</button>}

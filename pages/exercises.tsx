@@ -1,15 +1,15 @@
-import Router from 'next/router'
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { auth } from '../firebase/clientApp'
-import { useSignInWithEmailAndPasswordMutation } from '../redux/features/auth/authApi'
-import { userSlice } from '../redux/features/user/userSlice'
-import { RootState } from '../store'
 import ExercisesComponent from '../components/Exercises/Exercises'
-import Head from 'next/head'
+import { useSelector } from 'react-redux';
+import { userSlice } from '../redux/features/user/userSlice';
+import { RootState } from '../store';
+import LoadingIcons from 'react-loading-icons';
+import { useGetUserSavedExercisesQuery } from '../redux/features/exercise/exerciseApi';
 
 export default function Exercises() {
-    return (
-        <ExercisesComponent />
-    )
+    const { pageLoadingStatus } = useSelector((state: RootState) => state[userSlice.name])
+    const { userId } = useSelector((state: RootState) => state[userSlice.name]);
+    const { data, isSuccess, isFetching } = useGetUserSavedExercisesQuery(userId);
+
+    if (!isSuccess) return <div style={{height: '100%', display: 'grid', placeItems: 'center'}}> <LoadingIcons.BallTriangle stroke='var(--charcoal)'/> </div>
+    if (data) return <ExercisesComponent pageLoadingStatus={pageLoadingStatus} data={data} userId={userId} />
 }

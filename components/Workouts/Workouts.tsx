@@ -103,10 +103,12 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
     const uniqueAreas = useMemo(() => sortUniqueWorkoutExercises(workoutExercises!), [workoutExercises]);
     const [newSetMode, setNewSetMode] =useState<{ id: string, data: SetBlock}>({ id: '', data: { sets: 3, reps: 8, weight: 100, id: '' }})
     const [deleteUserWorkout] = useDeleteUserWorkoutMutation();
-    const [ghostPiece, setGhostPiece] = useState<null | string>(null)
+    const [ghostPiece, setGhostPiece] = useState<null | string>(null);
     const workoutExercisesRef = useRef<Array<HTMLDivElement | null>>([]);
     const [activeWorkoutExerciseRef, setActiveWorkoutExerciseRef] = useState<HTMLDivElement | null>(null);
     const [successfullyDropped ,setSuccessfullyDropped] = useState(false);
+    const uniqueAreasRef = useRef<HTMLUListElement | null>(null);
+    const workoutCreatorContainerRef = useRef<HTMLDivElement>(null)
 
     interface ChangeEvent<T = HTMLInputElement> extends React.ChangeEvent<T> {}
     type ChangeEventHandler<T = HTMLInputElement> = (event: ChangeEvent<T>) => void;
@@ -117,7 +119,6 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
 
     function sortUniqueWorkoutExercises(arr: AllocatedExercise[]): AreaTargeted[] | undefined{
         if (arr){
-            console.log(arr)
             const counts: {[key: string]: {count: number, id: string}} = arr.reduce((acc: any, curr: AllocatedExercise) => {
                 curr.areasTargeted && curr.areasTargeted.forEach((areaTargeted) => {
                   if (areaTargeted.name in acc) {
@@ -173,7 +174,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                     } else{
                         setActiveWorkoutExerciseRef(workoutExercisesRef.current[indexCheck]);
                         workoutExercisesRef.current[indexCheck]?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-                        workoutExercisesRef.current[indexCheck]?.setAttribute('style', 'border: 1px red solid');
+                        workoutExercisesRef.current[indexCheck]?.setAttribute('style', 'border: 1px #E6676B solid');
                     }
                 } else{
                     setGhostPiece(active?.data?.current?.exercise?.name);
@@ -285,7 +286,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
     }
 
     return(
-        <div className={styles.workoutCreatorContainer}>
+        <div ref={workoutCreatorContainerRef} className={styles.workoutCreatorContainer}>
             <div style={{padding: '1rem 1rem 0.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '60%', position: 'relative'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <input value={workoutName} placeholder='New Workout Name' style={{all: 'unset', width: '100%'}} onChange={handleWorkoutNameChange}/>
@@ -295,10 +296,10 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                         <button style={{ padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={verifyWorkoutInformation}>Save</button>
                     </span>
                 </div>
-                <ul className={styles.areasTargeted} style={{justifyContent: 'space-evenly', gap: '0rem', height: uniqueAreas && uniqueAreas.length > 0 ? '70px' : '0', transition: 'height 1s ease'}}>
+                <ul ref={uniqueAreasRef} className={styles.areasTargeted} style={{ gap: '1rem', height: uniqueAreas && uniqueAreas.length > 0 ? '70px' : '0', transition: 'height 1s ease'}}>
                     {uniqueAreas && uniqueAreas.map(area => {
                         return (
-                            <li key={area.id}>
+                            <li style={{margin: '0 auto'}} key={area.id}>
                                 <Image src={`/images/muscle-parts/${area.name}.png`} alt={`${area.name}`} width='30' height='30' />
                                 <p>{area.name}</p>
                             </li>)
@@ -313,7 +314,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                                     <div key={exercise.id} ref={el => workoutExercisesRef.current[i] = el} className={styles.individualWorkoutExercises} > 
                                         <div style={{fontSize: '0.8rem', width: '90%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
                                             <div>{exercise.name}</div>
-                                            {newSetMode.id !== exercise.id && <button onClick={() => setNewSetMode({...newSetMode, id: exercise.id})} style={{ padding: '2px 10px', border: 'none', fontSize: '0.6rem', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>Add Sets</button>}
+                                            {newSetMode.id !== exercise.id && <button onClick={() => (setNewSetMode({...newSetMode, id: exercise.id}), workoutExercisesRef.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }))} style={{ padding: '2px 10px', border: 'none', fontSize: '0.6rem', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>Add Sets</button>}
                                         </div>
                                         <div style={{display: 'flex', flexDirection: 'column', width: '100%', gap: '2px'}}>
                                             {exercise.sets.length > 0 && 
@@ -349,7 +350,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                                                 </div>
                                             </div>}
                                         </div>
-                                        <Image onClick={() => setWorkoutExercises((prevState: AllocatedExercise[] | null) => prevState ? prevState.filter((prevExercise: AllocatedExercise) => exercise.id !== prevExercise.id) : null)} src='/images/icons/remove.png' alt='removeIcon' width='18' height='18'/>
+                                        <Image onClick={() => (workoutExercisesRef.current[i]?.setAttribute('style', 'opacity: 0'), setTimeout(() => setWorkoutExercises((prevState: AllocatedExercise[] | null) => prevState ? prevState.filter((prevExercise: AllocatedExercise) => exercise.id !== prevExercise.id) : null), 400))} src='/images/icons/remove.png' alt='removeIcon' width='18' height='18'/>
                                     </div>
                                 )
                             })}

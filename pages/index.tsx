@@ -1,22 +1,18 @@
-import { auth } from '../firebase/clientApp'
+import LandingPage from '../components/LandingPage/LandingPage'
+import { useSelector } from "react-redux";
+import { userSlice } from "../redux/features/user/userSlice";
+import { RootState } from '../store';
 import { useEffect } from 'react'
-import Router from 'next/router'
-import { onAuthStateChanged } from 'firebase/auth'
+import { useRouter } from 'next/router'
 
-export default function Home() {
+export default function Home( { windowSize }: { windowSize: { width: number | undefined, height: number | undefined }}) {
+  const { loginStatus } = useSelector((state: RootState) => state[userSlice.name])
+
+  const router = useRouter();
+
   useEffect(() => {
-    auth.currentUser && Router.push('/dashboard')
-  }, [])
+    loginStatus && router.push('/dashboard')
+  }, [loginStatus, router])
 
-  return (
-    <div>
-      Home Page 
-      <div onClick={() => Router.push('/login')}>
-        Log In
-      </div>
-      <div onClick={() => Router.push('/signup')}>
-        Sign Up
-      </div>
-    </div>
-  )
+  return <LandingPage windowSize={windowSize} />
 }

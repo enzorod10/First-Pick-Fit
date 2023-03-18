@@ -1,14 +1,21 @@
 import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Calendar from '../components/Calendar/Calendar/Calendar'
 import Nav from './Nav/Nav'
 import { useSelector } from "react-redux";
 import { userSlice } from "../redux/features/user/userSlice";
 import { RootState } from '../store';
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const Layout = ( { children, windowSize }: { children: React.ReactNode, windowSize: { width: number | undefined, height: number | undefined } } ) => {
-    const { userId } = useSelector((state: RootState) => state[userSlice.name])
+    const { userId, loginStatus } = useSelector((state: RootState) => state[userSlice.name])
 
+    const router = useRouter();
+
+    useEffect(() => {
+      !loginStatus && router.push('/')
+    }, [loginStatus, router])
 
     return(
         <>

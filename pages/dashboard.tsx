@@ -1,14 +1,16 @@
-import Head from 'next/head';
 import UserPrompt from '../components/UserPrompt/UserPrompt';
+import { useSelector } from 'react-redux';
+import { userSlice } from '../redux/features/user/userSlice';
+import { RootState } from '../store';
+import LoadingIcons from 'react-loading-icons';
+
 
 export default function Dashboard() {
+  const { pageLoadingStatus } = useSelector((state: RootState) => state[userSlice.name])
+
   return (
     <div className='dashboard'>
-      <Head>
-        <title>Dashboard - First Pick Fit</title>
-        <meta name="description" content="Meta description for the Home page" />
-      </Head>
-      <UserPrompt />
+      <UserPrompt pageLoadingStatus={pageLoadingStatus}/>
     </div>
   )
 }

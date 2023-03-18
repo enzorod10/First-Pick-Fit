@@ -1,16 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { onAuthStateChanged } from "firebase/auth"
-import { auth } from "../../../firebase/clientApp"
-import { store } from "../../../store"
 
 interface InitialState{
     loginStatus: boolean,
-    userId?: string
+    userId?: string,
+    pageLoadingStatus: boolean
 }
 
 const initialState: InitialState = {
     loginStatus: false,
-    userId: undefined
+    userId: undefined,
+    pageLoadingStatus: false
 }
 
 export const userSlice = createSlice({
@@ -20,11 +19,14 @@ export const userSlice = createSlice({
         setUserStatus: (state, action) => {
             state.loginStatus = action.payload.loginStatus
             state.userId = action.payload.userId
+        },
+        setPageLoadingStatus: (state, action) => {
+            state.pageLoadingStatus = action.payload
         }
     },
-    // extraReducers: (builder.addMutation()){
-
-    // }
 })
+
+export const { setPageLoadingStatus, setUserStatus } = userSlice.actions;
+
 
 export default userSlice.reducer

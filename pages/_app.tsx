@@ -4,7 +4,7 @@ import Layout from '../components/Layout'
 import useWindowSize from '../hooks/useWindowSize';
 import { store } from '../store'
 import { Provider } from 'react-redux'
-import { userSlice } from '../redux/features/user/userSlice'
+import { setUserStatus } from '../redux/features/user/userSlice'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../firebase/clientApp'
 import {
@@ -37,9 +37,9 @@ export default function App({ Component, pageProps, ...appProps }: AppProps) {
 
   onAuthStateChanged(auth, (user) => {
     if (user){
-        store.dispatch(userSlice.actions.setUserStatus({ loginStatus: true, userId: user.uid}))
+        store.dispatch(setUserStatus({ loginStatus: true, userId: user.uid}))
     } else {
-        store.dispatch(userSlice.actions.setUserStatus({ loginStatus: false } ))
+        store.dispatch(setUserStatus({ loginStatus: false } ))
     }
   });
 
@@ -85,9 +85,9 @@ export default function App({ Component, pageProps, ...appProps }: AppProps) {
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         {(['/dashboard', '/workouts', '/exercises']).includes(appProps.router.pathname) ?
         <Layout windowSize={windowSize}>
-          <Component {...pageProps} windowSize={windowSize}/>
+          <Component {...pageProps} />
         </Layout> :
-        <Component {...pageProps} />}
+        <Component {...pageProps} windowSize={windowSize}/>}
         <DragOverlay>
           {
             activeElement && activeElement?.data?.current.renderDragLayout?.(activeElement.data.current)

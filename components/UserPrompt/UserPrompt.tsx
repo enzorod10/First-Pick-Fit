@@ -11,7 +11,7 @@ import AllocatedExercise from '../../interfaces/AllocatedExercise';
 import Workout from '../../interfaces/Workout';
 import Image from 'next/image';
 
-const UserPrompt = () => {
+const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
     const { userId } = useSelector((state: RootState) => state[userSlice.name])
     const { monthAndYear, monthSelected, spacedMonthAndYear, dateClicked } = useSelector((state: RootState) => state[calendarSlice.name])
     const [skip, setSkip] = useState<boolean[]>([false, true])
@@ -20,6 +20,11 @@ const UserPrompt = () => {
     const [secondRender, setSecondRender] = useState(false)
     const [thirdRender, setThirdRender] = useState(false)
     const clickedOnDateResult = useGetClickedOnDateQuery({ userId, monthAndYear, dateClicked }, { skip: skip[1] })
+    const [startup, setStartup] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => setStartup(true), 200)
+    }, [])
 
     useEffect(() => {
         monthAndYear !== '' && setSkip((prevskip) => [prevskip[0] = false, prevskip[1] = true])
@@ -180,7 +185,7 @@ const UserPrompt = () => {
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} style={{opacity: (pageLoadingStatus || !startup) ? '0' : '1'}}>
             { skip[1] && <div>Today is
                 <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>
                     <Typewriter

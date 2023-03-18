@@ -4,6 +4,7 @@
     flex-direction: column;
     height: 100%;
     overflow-y: auto;
+    transition: opacity 0.2s ease-out;
 }
 
 .innerContainer{

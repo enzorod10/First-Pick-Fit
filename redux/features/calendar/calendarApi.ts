@@ -65,7 +65,6 @@ export const calendarApi = createApi({
                     const data = snapshot.docs.find(snap => {
                         return snap.data().date === dateClicked 
                     })
-                    console.log(data)
                     
                     if (!data) return { error: 'Clicked date has no workout' }
 

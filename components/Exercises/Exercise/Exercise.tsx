@@ -4,6 +4,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
 import Image from 'next/image';
 import { useDeleteUserSavedExerciseMutation } from '../../../redux/features/exercise/exerciseApi';
+import { useState } from 'react';
 
 interface AppProps{
     exercise: Exercise;
@@ -13,11 +14,13 @@ interface AppProps{
 const Exercise = ( { exercise, userId }: AppProps ) => {
     const { listeners, attributes, setNodeRef, transform, transition } = useSortable( { id: 'sortable-' + exercise.id } );
     const [deleteUserSavedExercise] = useDeleteUserSavedExerciseMutation();
+    const [disappear, setDisappear] = useState(false);
 
     const style = {
         transform: CSS.Transform.toString(transform),
-        transition,
+        transition: transition + ', ' + 'opacity 0.4s ease-out',
         touchAction: 'manipulation',
+        opacity: disappear ? '0' : '1'
     };
 
     return(
@@ -29,7 +32,7 @@ const Exercise = ( { exercise, userId }: AppProps ) => {
                         {exercise.name}
                     </div>
                     <div style={{fontSize: '0.7rem', display: 'flex', width: 'fit-content'}}>
-                        <span onClick={() => deleteUserSavedExercise({userId, exerciseId: exercise.id})}>Remove</span>
+                        <span onClick={() => (setDisappear(true), deleteUserSavedExercise({userId, exerciseId: exercise.id}))}>Remove</span>
                     </div>
                 </div>
             </div>

@@ -61,7 +61,6 @@ const Calendar = ( { windowSize, userId }: { windowSize: { width: number | undef
         onDragEnd: (event: DragEndEvent) => {
             const { active, over } = event
             if (active?.data?.current?.type === 'workout' && over?.data?.current?.type === 'cell'){
-            console.log(active)
                 const date = Number(over.id.toString().slice(5))
                 addUserWorkoutToMonthWorkoutsMutation({ userId, monthAndYear: `${monthsOfTheYear[((monthSelected - 1) % 12 + 12) % 12].toLowerCase()}_${yearSelected}`, date, workout: active?.data?.current?.workout })
             }

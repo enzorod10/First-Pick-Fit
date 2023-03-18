@@ -17,12 +17,12 @@ import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { useCreateUserWorkoutMutation, useEditUserWorkoutMutation, useDeleteUserWorkoutMutation } from '../../redux/features/workout/workoutApi';
 
 export const WorkoutsComponent = ({ workouts, userId }: { workouts: WorkoutInterface[], userId: string | undefined}) => {
-    const [selectedWorkout, setSelectedWorkout] = useState<Workout | undefined>()
+    const [selectedWorkout, setSelectedWorkout] = useState<WorkoutInterface | undefined>()
     const [isEditingWorkout, setIsEditingWorkout] = useState<boolean>(false)
     const [createUserWorkout] = useCreateUserWorkoutMutation();
     const [editUserWorkout] = useEditUserWorkoutMutation();
     const [search, setSearch] = useState('');
-    const [searchedWorkouts, setSearchedWorkouts] = useState<Workout[]>([]);
+    const [searchedWorkouts, setSearchedWorkouts] = useState<WorkoutInterface[]>([]);
     
     const dispatch = useDispatch();
 

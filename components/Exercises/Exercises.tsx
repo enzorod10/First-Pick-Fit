@@ -15,8 +15,8 @@ import { Area } from '../../interfaces/AreaTargeted';
 import { useDispatch } from 'react-redux'
 import { setIsCalendarExpanded } from "../../redux/features/calendar/calendarSlice"
 
-const Exercises = ( { data, userId, pageLoadingStatus }: {data: Exercise[], userId: string | undefined, pageLoadingStatus: boolean}) => {
-    const [exercises, setExercises] = useState<Exercise[] | null>(data);
+const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterface[], userId: string | undefined, pageLoadingStatus: boolean}) => {
+    const [exercises, setExercises] = useState<ExerciseInterface[] | null>(data);
     const [exerciseEditor, setExerciseEditor] = useState({ mode: 'none', data: { id: '', name: '', areasTargeted: [{ id: '', name: '' as Area }] } })
     const [addUserSavedExercise] = useAddUserSavedExerciseMutation();
     const [changeExerciseOrderMutation] = useChangeExercisesOrderMutation();

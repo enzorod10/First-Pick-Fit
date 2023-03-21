@@ -1,7 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { spawn } from 'child_process';
 import { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, arrayUnion, deleteDoc } from 'firebase/firestore';
-import firestore from 'firebase/firestore';
 import { db } from '../../../firebase/clientApp';
 import Workout from '../../../interfaces/Workout';
 
@@ -84,6 +82,19 @@ export const calendarApi = createApi({
                 return [{ type: 'Day', id: date }, { type: 'Month', id: monthAndYear.split('_')[0]} ]
             }
         }),
+        changeUserWorkoutCompleteStatus: builder.mutation<null,  { userId: string | undefined, monthAndYear: string, date: number }>({
+            async queryFn({ userId, monthAndYear, date }){
+                if (userId){
+                    const docRef = await getDoc(doc(db, 'user', userId, monthAndYear, `${date}`))
+                    console.log(docRef.ref)
+                    await updateDoc(docRef.ref, { workout: {...docRef.data()?.workout, complete: docRef.data()?.workout.complete ? false : true }})
+                    return { data: null }
+                } else return { error: 'Error'}
+            },
+            invalidatesTags: (result, error, { date, monthAndYear }) => {
+                return [{ type: 'Day', id: date }, { type: 'Month', id: monthAndYear.split('_')[0]} ]
+            }
+        }),
         addUserWorkoutToMonthWorkouts: builder.mutation<null,  { userId: string | undefined, monthAndYear: string, date: number, workout: Workout }>({
             async queryFn({ userId, monthAndYear, date, workout }){
                 if (userId){
@@ -99,4 +110,4 @@ export const calendarApi = createApi({
     })
 })
 
-export const { useGetUserMonthWorkoutsQuery, useAddUserWorkoutToMonthWorkoutsMutation, useDeleteUserWorkoutFromMonthWorkoutsMutation, useGetUserNextWorkoutQuery, useGetClickedOnDateQuery } = calendarApi; 
+export const { useGetUserMonthWorkoutsQuery, useAddUserWorkoutToMonthWorkoutsMutation, useDeleteUserWorkoutFromMonthWorkoutsMutation, useGetUserNextWorkoutQuery, useGetClickedOnDateQuery, useChangeUserWorkoutCompleteStatusMutation } = calendarApi; 

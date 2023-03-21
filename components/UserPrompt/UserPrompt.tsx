@@ -5,7 +5,7 @@ import { userSlice } from '../../redux/features/user/userSlice';
 import { calendarSlice } from '../../redux/features/calendar/calendarSlice';
 import { useSelector } from "react-redux";
 import { RootState } from '../../store';
-import { useGetUserNextWorkoutQuery, useGetClickedOnDateQuery, useDeleteUserWorkoutFromMonthWorkoutsMutation } from '../../redux/features/calendar/calendarApi';
+import { useGetUserNextWorkoutQuery, useGetClickedOnDateQuery, useDeleteUserWorkoutFromMonthWorkoutsMutation, useChangeUserWorkoutCompleteStatusMutation } from '../../redux/features/calendar/calendarApi';
 import { DateTime } from 'luxon';
 import AllocatedExercise from '../../interfaces/AllocatedExercise';
 import Workout from '../../interfaces/Workout';
@@ -17,6 +17,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
     const [skip, setSkip] = useState<boolean[]>([false, true])
     const { data, error, isSuccess, isFetching, refetch } = useGetUserNextWorkoutQuery({ userId, monthAndYear, currentDate: DateTime.now().day, currentMonth: DateTime.now().month, monthSelected, currentYear: DateTime.now().year }, { skip: skip[0]})
     const [deleteUserWorkoutFromMonthWorkouts] = useDeleteUserWorkoutFromMonthWorkoutsMutation();
+    const [changeUserWorkoutCompleteStatus] = useChangeUserWorkoutCompleteStatusMutation();
     const [secondRender, setSecondRender] = useState(false)
     const [thirdRender, setThirdRender] = useState(false)
     const clickedOnDateResult = useGetClickedOnDateQuery({ userId, monthAndYear, dateClicked }, { skip: skip[1] })
@@ -58,7 +59,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
     const UserHasUpcomingWorkoutRender: any = () => {
         return(
             <div style={{display: 'flex', flexDirection: 'column'}}>
-                <div>
+                <div style={{lineHeight: '20px'}}>
                     The next workout you have planned for the month you are viewing is on <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>{spacedMonthAndYear.split(' ')[0]} {data.date} </span> {' '} 
                     and it is called {' '} <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>{data.workout.name}.</span> {' '}
                     Here is more information:
@@ -75,7 +76,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
                 </h3>
                 <ul className={styles.areasTargeted}>
                     {workout.areasTargeted.map((area, index) => {
-                        return (index < 2 &&
+                        return (
                             <li key={area.id}>
                                 <Image src={`/images/muscle-parts/${area.name}.png`} alt={`${area.name}`} width='30' height='30' />
                                 <p>{area.name}</p>
@@ -116,6 +117,14 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
                 )})}
                 <h3 style={{fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--oxford-blue)'}}>
                     <span>
+                        Mark Complete?
+                    </span>
+                    <div onClick={() => changeUserWorkoutCompleteStatus({userId, monthAndYear, date: (data?.date) ?? (clickedOnDateResult?.data?.date)})} style={{boxSizing: 'border-box', border: workout.complete ? 'none' : '1px var(--cambridge-blue) solid', backgroundColor: workout.complete ? 'var(--cambridge-blue)' : 'none', borderRadius: '50%', width: '15px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        <Image src='/images/icons/checkmark.png' alt='checkmark' width='10' height='10'/>
+                    </div>
+                </h3>
+                <h3 style={{fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--oxford-blue)'}}>
+                    <span>
                         Remove From Calendar? 
                     </span>
                     <Image onClick={removeFromCalendar} src='/images/icons/remove.png' alt='removeIcon' width='15' height='15'/>
@@ -125,8 +134,8 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
     
     const ClickedOnWorkoutInformationRender = () => {
         return(
-            <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
-                <span>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '0rem', }}>
+                <span style={{lineHeight: '20px'}}>
                     You clicked on{' '}
                     <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>
                         <Typewriter
@@ -160,7 +169,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
     const SecondMessageRender: any = () => {
         if (isSuccess && !isFetching) return UserHasUpcomingWorkoutRender()
         if (error === 'No upcoming workout for this month'){
-            return <div>
+            return <div style={{lineHeight: '20px'}}>
             Currently viewing <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>{spacedMonthAndYear}</span> {' '}
             It looks like you don&apos;t have any upcoming workouts 
             for this month. You can drag workouts directly into a date
@@ -168,7 +177,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
         </div>
         }
         if (error === 'Older date'){
-            return <div>
+            return <div style={{lineHeight: '20px'}}>
             Currently viewing <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>{spacedMonthAndYear}</span>.
             It looks like this is from a previous month which has already passed. 
             You can drag workouts directly into a date to schedule a workout for that date.
@@ -186,7 +195,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
 
     return (
         <div className={styles.container} style={{opacity: (pageLoadingStatus || !startup) ? '0' : '1'}}>
-            { skip[1] && <div>Today is
+            { skip[1] && <div style={{lineHeight: '20px'}}>Today is
                 <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>
                     <Typewriter
                     words={[` ${DateTime.now().toFormat('MMMM d, yyyy')}. `]}

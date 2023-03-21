@@ -68,11 +68,12 @@ const Workout = ( { workout, initiateEditMode }: AppProps) => {
 
 export const DraggableWorkout = (props: any) => {
     const {attributes, listeners, setNodeRef} = useDraggable({
-        id: props.workout.id, data: { type: 'workout', workout: props.workout, renderDragLayout: ({workout} : {workout: Workout}) => <div >  hello</div> }
+        id: props.workout.id, data: { type: 'workout', workout: props.workout, renderDragLayout: ({workout} : {workout: Workout}) => <div style={{fontSize: '0.6rem', padding: '0.18rem', display: 'flex', alignItems: 'flex-end', color: 'var(--charcoal)', border: '1px #0119364a solid', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: document.querySelector('#date-1')?.getBoundingClientRect().width, height: document.querySelector('#date-1')?.getBoundingClientRect().height }}> {workout.name} </div> }
     });
 
     return (
-        <div ref={setNodeRef} {...listeners} style={{touchAction: 'manipulation'}} {...attributes}>
+        <div ref={setNodeRef} style={{touchAction: 'manipulation', position: 'relative', WebkitUserSelect: 'none'}} {...attributes}>
+            <div {...listeners} style={{touchAction: 'manipulation', position:'absolute', height: '100%', width: '85px'}}></div>
             {props.children}
         </div>
     )

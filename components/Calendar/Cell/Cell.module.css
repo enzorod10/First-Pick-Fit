@@ -4,10 +4,21 @@
     margin: 0.4px;
     height: 2rem;
     padding: 0.09rem 0.18rem;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    overflow-x: hidden;
 }
 
 .definedCellContainer{
     font-size: 0.7em;
+}
+
+.definedCellContainer > span{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 .deleteButton{

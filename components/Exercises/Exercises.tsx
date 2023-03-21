@@ -143,17 +143,17 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
     return(
         <ul className={styles.container} style={{opacity: (pageLoadingStatus || !startup) ? '0' : '1'}}>
             <div className={styles.searchExerciseNameAndButton} style={{display: 'flex', justifyContent: 'space-between'}}>
-                <input type="text" placeholder='Search Exercises...' value={search} onChange={e => setSearch(e.target.value)} style={{all: 'unset', fontSize: '0.9rem', width: '100%' }}/>
+                <input type="text" placeholder='Search Exercises...' value={search} onChange={e => setSearch(e.target.value)} style={{all: 'unset', color: 'var(--charcoal)', fontSize: '0.9rem', width: '100%' }}/>
                 {exerciseEditor.mode === 'none' && <button style={{ padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => (setExerciseEditor({ ...exerciseEditor, mode: 'create' }), dispatch(setIsCalendarExpanded(false)) )} >New Exercise</button>}
             </div>
             {exerciseEditor.mode === 'create' &&
                 <div style={{display: 'flex', flexDirection: 'column', padding: '0.5rem', marginBottom: '0.5rem', gap: '1rem', border: '1px black solid', alignItems: 'center'}}>
-                    <input className={styles.exerciseCreatorName} onChange={e => setExerciseEditor({ ...exerciseEditor, data: { ...exerciseEditor.data, name: e.target.value }})} value={exerciseEditor.data.name} type="text" placeholder='New Exercise Name' style={{all: 'unset', textAlign: 'center', width: '100%'}}/>
+                    <input className={styles.exerciseCreatorName} onChange={e => setExerciseEditor({ ...exerciseEditor, data: { ...exerciseEditor.data, name: e.target.value }})} value={exerciseEditor.data.name} type="text" placeholder='New Exercise Name' style={{all: 'unset', color: 'var(--charcoal)', textAlign: 'center', width: '100%'}}/>
                     <ul className={styles.areasTargeted}>
                         {areasTargeted.map(areaTargeted => {
                             return (
                                 <li onClick={() => toggleAreaTargeted(areaTargeted.id)} key={areaTargeted.id}>
-                                    <Image style={{backgroundColor: areaTargeted.selected ? 'lightgreen' : ''}} src={`/images/muscle-parts/${areaTargeted.name}.png`} alt={`${areaTargeted.name}`} width='30' height='30' />
+                                    <Image style={{backgroundColor: areaTargeted.selected ? 'var(--tea-green)' : ''}} src={`/images/muscle-parts/${areaTargeted.name}.png`} alt={`${areaTargeted.name}`} width='30' height='30' />
                                     <p>{areaTargeted.name}</p>
                                 </li>
                             )

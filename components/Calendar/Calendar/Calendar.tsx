@@ -85,7 +85,7 @@ const Calendar = ( { windowSize, userId }: { windowSize: { width: number | undef
                     return <div key={day} className={styles.day}> {day} </div>
                 })}
                 {monthMapped?.map((cell, index) => {
-                    return ( <Cell key={cell ? cell.date : 0 - index} dateInfo={cell && data && data[cell.date]} userId={userId} id={`date-${cell?.date}`} date={cell?.date} monthAndYear= {`${monthsOfTheYear[((monthSelected - 1) % 12 + 12) % 12].toLowerCase()}_${yearSelected}`} calendarExpanded={calendarExpanded}/>)
+                    return ( <Cell key={cell ? cell.date : 0 - index} dateInfo={cell && data && data[cell.date]} monthSelected={monthSelected} userId={userId} id={`date-${cell?.date}`} date={cell?.date} monthAndYear= {`${monthsOfTheYear[((monthSelected - 1) % 12 + 12) % 12].toLowerCase()}_${yearSelected}`} calendarExpanded={calendarExpanded}/>)
                 })}
             </div>
         </div>

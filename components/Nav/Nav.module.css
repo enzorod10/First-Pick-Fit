@@ -1,14 +1,14 @@
 .container{
     display: flex;
     justify-content: space-evenly;
+    border-top: 1px var(--charcoal) solid;
     min-height: 60px;
 }
 
 .container > li{
-    border-top: 1px var(--charcoal) solid;
     height: 100%;
-    width: 100%;
     display: flex;
+    margin: 0 auto;
     justify-content: center;
     align-items: center;
     font-size: 0.9rem;

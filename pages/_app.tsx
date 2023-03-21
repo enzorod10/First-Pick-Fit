@@ -19,6 +19,7 @@ import {
   DragOverlay,
 } from '@dnd-kit/core';
 import {
+  snapCenterToCursor,
   restrictToWindowEdges
 } from '@dnd-kit/modifiers'
 import { useEffect, useState } from 'react';

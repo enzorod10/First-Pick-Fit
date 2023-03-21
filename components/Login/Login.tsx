@@ -16,7 +16,7 @@ export default function Signup({ windowSize, changeAuthStage }: { windowSize: { 
     const [signInWithEmailAndPassword, result] = useSignInWithEmailAndPasswordMutation()
 
     return (
-        <div className='loginPage' style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', width: windowSize.width && windowSize.width > 900 ? '70%' : '100%'}}>
+        <div onSubmit={e => e.preventDefault()} className='loginPage' style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', width: windowSize.width && windowSize.width > 900 ? '70%' : '100%'}}>
             <form style={{display: 'flex', flexDirection: 'column', alignItems:'center', width: '80%', maxWidth: '350px', margin: 'auto auto', gap: '12px'}}>
                 <Image src='/images/logo/logo.png' alt='First Pick Fit Logo' height='64' width='64'/>
                 <h2 style={{color: 'var(--oxford-blue)'}}>Welcome Back</h2>
@@ -40,7 +40,7 @@ export default function Signup({ windowSize, changeAuthStage }: { windowSize: { 
                     <span style={{minWidth: 'fit-content', fontWeight: 'bold', color: 'var(--oxford-blue)', cursor: 'pointer'}}>Forgot Password?</span>
                 </div>
 
-                <button style={{padding: '10px 0px', width: '100%', backgroundColor: 'var(--oxford-blue)', borderRadius: '5px', color: 'white'}} type='button' onClick={() => signInWithEmailAndPassword({ auth, email: userInfo.email, password: userInfo.password })}> Sign In</button>
+                <button type='submit' style={{padding: '10px 0px', width: '100%', backgroundColor: 'var(--oxford-blue)', borderRadius: '5px', color: 'white'}} onClick={() => signInWithEmailAndPassword({ auth, email: userInfo.email, password: userInfo.password })}> Sign In</button>
                 <button onClick={() => signInWithRedirect(auth, googleProvider)} style={{display: 'flex', fontWeight: 'bold', justifyContent: 'center', gap: '10px', backgroundColor: 'white', border: '1px var(--charcoal) solid', alignItems: 'center', padding: '10px 0px', width: '100%', borderRadius: '5px', color: 'var(--oxford-blue)'}} type='button'> 
                     <Image style={{}} src='/images/icons/google.png' alt='Google' height='15' width='15'/>
                     Sign In with Google

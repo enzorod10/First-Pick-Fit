@@ -1,0 +1,22 @@
+.container{
+    padding: 0.5rem 0.5rem 0rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    transition: opacity 0.2s ease-out;
+    margin: 0.5rem;
+    padding-bottom: 1rem;
+    gap: 0.5rem;
+}
+
+.programContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    justify-content: space-between;
+    border-radius: 2px;
+    border: 1px var(--charcoal) solid;
+    color: var(--charcoal);
+}

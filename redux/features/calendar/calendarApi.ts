@@ -1,6 +1,8 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, arrayUnion, deleteDoc } from 'firebase/firestore';
+import { DateTime, Duration } from 'luxon';
 import { db } from '../../../firebase/clientApp';
+import Program from '../../../interfaces/Program';
 import Workout from '../../../interfaces/Workout';
 
 export const calendarApi = createApi({
@@ -71,6 +73,7 @@ export const calendarApi = createApi({
             },
             providesTags: (result, err, { monthAndYear, dateClicked }): any => [{ type: 'Month' as const, id: monthAndYear.split('_')[0] }, { type: 'Day' as const, id: dateClicked}]
         }),
+       
         deleteUserWorkoutFromMonthWorkouts: builder.mutation<null,  { userId: string | undefined, monthAndYear: string, date: number }>({
             async queryFn({ userId, monthAndYear, date }){
                 if (userId){
@@ -86,7 +89,6 @@ export const calendarApi = createApi({
             async queryFn({ userId, monthAndYear, date }){
                 if (userId){
                     const docRef = await getDoc(doc(db, 'user', userId, monthAndYear, `${date}`))
-                    console.log(docRef.ref)
                     await updateDoc(docRef.ref, { workout: {...docRef.data()?.workout, complete: docRef.data()?.workout.complete ? false : true }})
                     return { data: null }
                 } else return { error: 'Error'}
@@ -106,8 +108,25 @@ export const calendarApi = createApi({
                 return [{ type: 'Day', id: date }, { type: 'Month', id: monthAndYear.split('_')[0]} ]
             }
         }),
-
+        addProgramToCalendar: builder.mutation<null,  { userId: string | undefined, startDate: string, endDate: string, program: Program }>({
+            async queryFn({ userId, program, startDate, endDate }){
+                if (userId){
+                    for (let i=0; i<program.duration; i++){
+                        for (let q=0; q<7; q++){
+                            if (program.shape[q] === null){
+                                continue;
+                            } else{
+                                let dateToUse = DateTime.fromFormat(startDate, 'MMMM d, yyyy').plus(Duration.fromObject({ days: (i*7) + q }));
+                                console.log(dateToUse.toFormat('MMMM d, yyyy'))
+                                await setDoc(doc(db, 'user', userId, dateToUse.toFormat('MMMM_yyyy').toLocaleLowerCase(), dateToUse.toFormat('d')), { date: Number(dateToUse.toFormat('d')), workout: program.workouts[program.shape[q]!] })
+                            }
+                        }
+                    }
+                    return { data: null }
+                } else return { error: 'Error'}
+            },
+        }),
     })
 })
 
-export const { useGetUserMonthWorkoutsQuery, useAddUserWorkoutToMonthWorkoutsMutation, useDeleteUserWorkoutFromMonthWorkoutsMutation, useGetUserNextWorkoutQuery, useGetClickedOnDateQuery, useChangeUserWorkoutCompleteStatusMutation } = calendarApi; 
+export const { useGetUserMonthWorkoutsQuery, useAddUserWorkoutToMonthWorkoutsMutation, useDeleteUserWorkoutFromMonthWorkoutsMutation, useGetUserNextWorkoutQuery, useGetClickedOnDateQuery, useChangeUserWorkoutCompleteStatusMutation, useAddProgramToCalendarMutation  } = calendarApi; 

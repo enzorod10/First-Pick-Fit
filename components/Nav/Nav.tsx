@@ -35,8 +35,8 @@ const Nav = () => {
             <li onClick={() => handleTabSwitch('/dashboard')}>
                 <span className={`${router.pathname === '/dashboard' && styles.active}`}>Dashboard</span>
             </li>
-            <li onClick={() => handleTabSwitch('/workouts')}>
-                <span className={`${router.pathname === '/plans' && styles.active}`}>Plans</span>
+            <li onClick={() => handleTabSwitch('/programs')}>
+                <span className={`${router.pathname === '/programs' && styles.active}`}>Programs</span>
             </li>
             <li onClick={() => handleTabSwitch('/workouts')}>
                 <span className={`${router.pathname === '/workouts' && styles.active}`}>Workouts</span>

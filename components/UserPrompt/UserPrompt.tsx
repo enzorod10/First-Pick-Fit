@@ -106,8 +106,8 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
                                                     <span> {setBlock.sets} </span>
                                                     <span> x </span>
                                                     <span>{setBlock.reps}</span>
-                                                    {setBlock.weight > 0 && <span> @ </span>}
-                                                    {setBlock.weight > 0 && <span>{setBlock.weight} lbs </span>}
+                                                    {setBlock.weight! > 0 && <span> @ </span>}
+                                                    {setBlock.weight! > 0 && <span>{setBlock.weight} lbs </span>}
                                                 </span>
                                             </li>
                                         )

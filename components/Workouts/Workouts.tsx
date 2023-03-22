@@ -101,7 +101,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
     const [errorMessage, setErrorMessage] = useState<string>('');
     const { data } = useGetUserSavedExercisesQuery(userId);
     const uniqueAreas = useMemo(() => sortUniqueWorkoutExercises(workoutExercises!), [workoutExercises]);
-    const [newSetMode, setNewSetMode] =useState<{ id: string, data: SetBlock}>({ id: '', data: { sets: 3, reps: 8, weight: 100, id: '' }})
+    const [newSetMode, setNewSetMode] = useState<{ id: string, data: SetBlock}>({ id: '', data: { sets: 3, reps: 8, weight: 100, id: '' }})
     const [deleteUserWorkout] = useDeleteUserWorkoutMutation();
     const [ghostPiece, setGhostPiece] = useState<null | string>(null);
     const workoutExercisesRef = useRef<Array<HTMLDivElement | null>>([]);
@@ -248,14 +248,14 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
         }
         if (section === 'weight'){
             if (action === 'decrease'){
-                if (tempNewSetMode.data.weight >= 2.5){
-                    tempNewSetMode.data.weight -= 2.5;
+                if (tempNewSetMode.data.weight! >= 2.5){
+                    tempNewSetMode.data.weight! -= 2.5;
                 }
-                if (tempNewSetMode.data.weight < 2.5){
-                    tempNewSetMode.data.weight = 0;
+                if (tempNewSetMode.data.weight! < 2.5){
+                    tempNewSetMode.data.weight! = 0;
                 }
             } else {
-                tempNewSetMode.data.weight += 2.5;
+                tempNewSetMode.data.weight! += 2.5;
             }
         }
         setNewSetMode(tempNewSetMode);
@@ -328,8 +328,8 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                                                                 <span> x </span>
                                                                 <span>{setBlock.reps}</span>
                                                             </span>
-                                                            {setBlock.weight > 0 && <span style={{fontSize: '0.7rem'}}> @ </span>}
-                                                            {setBlock.weight > 0 && <span>{setBlock.weight} lbs</span>}
+                                                            {setBlock.weight! > 0 && <span style={{fontSize: '0.7rem'}}> @ </span>}
+                                                            {setBlock.weight! > 0 && <span>{setBlock.weight} lbs</span>}
                                                         </li>
                                                     )})}
                                                 </ol>}

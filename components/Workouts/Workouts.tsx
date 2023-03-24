@@ -6,7 +6,7 @@ import styles from './Workouts.module.css';
 import Exercise from '../../interfaces/Exercise';
 import AllocatedExercise from '../../interfaces/AllocatedExercise';
 import SetBlock from '../../interfaces/SetBlock';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { uid } from 'uid';
 import { DndContext, useDraggable, useDroppable, useDndMonitor, DragEndEvent, DragOverEvent } from '@dnd-kit/core';
@@ -15,14 +15,16 @@ import { useGetUserSavedExercisesQuery } from '../../redux/features/exercise/exe
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { useCreateUserWorkoutMutation, useEditUserWorkoutMutation, useDeleteUserWorkoutMutation } from '../../redux/features/workout/workoutApi';
+import { setClickedOnButton, setHideSearchBar, setSearchedItems, userSlice } from '../../redux/features/user/userSlice'
+import { RootState } from '../../store';
 
 export const WorkoutsComponent = ({ workouts, userId }: { workouts: WorkoutInterface[], userId: string | undefined}) => {
     const [selectedWorkout, setSelectedWorkout] = useState<WorkoutInterface | undefined>()
     const [isEditingWorkout, setIsEditingWorkout] = useState<boolean>(false)
     const [createUserWorkout] = useCreateUserWorkoutMutation();
     const [editUserWorkout] = useEditUserWorkoutMutation();
-    const [search, setSearch] = useState('');
     const [searchedWorkouts, setSearchedWorkouts] = useState<WorkoutInterface[]>([]);
+    const { search, clickedOnButton} = useSelector((state: RootState) => state[userSlice.name])
     
     const dispatch = useDispatch();
 
@@ -32,13 +34,24 @@ export const WorkoutsComponent = ({ workouts, userId }: { workouts: WorkoutInter
         isEditingWorkout ? setIsEditingWorkout(false) : setIsEditingWorkout(true)
     }
 
+    useEffect(() => {
+        if (clickedOnButton){
+            initiateEditMode();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clickedOnButton])
+
     const handleCreatedWorkout = (workout?: WorkoutInterface) => {
+        dispatch(setHideSearchBar(false))
+        dispatch(setClickedOnButton(false))
         setIsEditingWorkout(false)
         dispatch(setIsCalendarExpanded(true))
         workout && createUserWorkout({ userId, workout })
     }
 
     const handleEditedWorkout = (workout?: WorkoutInterface) => {
+        dispatch(setHideSearchBar(false))
+        dispatch(setClickedOnButton(false))
         setIsEditingWorkout(false)
         setSelectedWorkout(undefined)
         dispatch(setIsCalendarExpanded(true))
@@ -46,9 +59,9 @@ export const WorkoutsComponent = ({ workouts, userId }: { workouts: WorkoutInter
     }
 
     useEffect(() => {
-        if (workouts && search.trim() !== ''){
+        if (workouts && search.value.trim() !== ''){
             const tempWorkouts = workouts?.filter(workout => {
-                return workout.name.toLowerCase().includes(search.toLowerCase())
+                return workout.name.toLowerCase().includes(search.value.toLowerCase())
             })
             setSearchedWorkouts(tempWorkouts)
         }
@@ -58,13 +71,13 @@ export const WorkoutsComponent = ({ workouts, userId }: { workouts: WorkoutInter
     if (!isEditingWorkout){
         return(
             <div className={styles.workoutsContainer}>
-                <div className={styles.searchWorkoutNameAndButton}>
+                {/* <div className={styles.searchWorkoutNameAndButton}>
                     <input type="text" placeholder='Search Workouts...' value={search} onChange={e => setSearch(e.target.value)} style={{all: 'unset', width: '100%', fontSize: '0.9rem'}}/>
                     <button onClick={() => initiateEditMode()} style={{ padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>New Workout</button>
-                </div>
+                </div> */}
                 {!selectedWorkout && 
                 <div className={styles.workoutsInnerContainer}>
-                    {search.trim() === '' ? workouts.map(workout => {
+                    {search.value.trim() === '' ? workouts.map(workout => {
                         return(
                             <DraggableWorkout key={workout.id} workout={workout}>
                                 <Workout workout={workout} initiateEditMode={initiateEditMode}/>
@@ -83,18 +96,18 @@ export const WorkoutsComponent = ({ workouts, userId }: { workouts: WorkoutInter
         
     if (selectedWorkout && isEditingWorkout){
         return(
-            <WorkoutEditor handleEditedWorkout={handleEditedWorkout} workout={selectedWorkout} userId={userId} />
+            <WorkoutEditor dispatch={dispatch} handleEditedWorkout={handleEditedWorkout} workout={selectedWorkout} userId={userId} />
         )
     }
     if (!selectedWorkout && isEditingWorkout){
         return(
-            <WorkoutEditor handleCreatedWorkout={handleCreatedWorkout} userId={userId} />
+            <WorkoutEditor dispatch={dispatch} handleCreatedWorkout={handleCreatedWorkout} userId={userId} />
         )
     }
     else return null;
 }
 
-const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, userId }: { handleCreatedWorkout?: (workout?: WorkoutInterface) => void, handleEditedWorkout?: (workout?: WorkoutInterface) => void, workout?: WorkoutInterface, userId: string | undefined }) => {
+const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, userId, dispatch }: { handleCreatedWorkout?: (workout?: WorkoutInterface) => void, handleEditedWorkout?: (workout?: WorkoutInterface) => void, workout?: WorkoutInterface, userId: string | undefined, dispatch: any,}) => {
     const [workoutExercises, setWorkoutExercises] = useState<null | AllocatedExercise[]>(workout ? workout.exercises : null);
     const [workoutName, setWorkoutName] = useState<string>(workout ? workout.name : '');
     const { setNodeRef, isOver, node } = useDroppable({ id: 'newWorkoutExercisesContainer', data: { type: 'newWorkoutExercisesContainer' } });
@@ -110,8 +123,13 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
     const uniqueAreasRef = useRef<HTMLUListElement | null>(null);
     const workoutCreatorContainerRef = useRef<HTMLDivElement>(null)
 
+
     interface ChangeEvent<T = HTMLInputElement> extends React.ChangeEvent<T> {}
     type ChangeEventHandler<T = HTMLInputElement> = (event: ChangeEvent<T>) => void;
+
+    useEffect(() => {
+        dispatch(setHideSearchBar(true));
+    }, [dispatch])
 
     const handleWorkoutNameChange: ChangeEventHandler = (event) => {
         setWorkoutName(event.target.value)

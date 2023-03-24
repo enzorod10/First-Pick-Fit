@@ -4,8 +4,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth } from '../../firebase/clientApp';
 import { calendarSlice, setDateClicked, setIsCalendarExpanded } from '../../redux/features/calendar/calendarSlice';
-import { setPageLoadingStatus } from '../../redux/features/user/userSlice';
-import { RootState } from '../../store';
+import { setClickedOnButton, setPageLoadingStatus, setSearchedItems, setHideSearchBar } from '../../redux/features/user/userSlice';
+
 import styles from './Nav.module.css';
 
 const Nav = () => {
@@ -18,6 +18,9 @@ const Nav = () => {
             dispatch(setDateClicked(null));
         }
         if (router.pathname !== pathname){
+            dispatch(setSearchedItems({value: '', type: router.pathname}));
+            dispatch(setClickedOnButton(false));
+            dispatch(setHideSearchBar(false));
             dispatch(setPageLoadingStatus(true))
             router.events.on('routeChangeComplete', () => dispatch(setPageLoadingStatus(false)))
             if (!calendarExpanded){

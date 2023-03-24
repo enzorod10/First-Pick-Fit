@@ -1,0 +1,9 @@
+.searchItemNameAndButton{
+    display: flex;
+    align-items: center;
+    padding: 1rem 1rem 0rem 1rem;
+}
+
+.searchItemNameAndButton > input::placeholder{
+    text-transform: capitalize;
+}

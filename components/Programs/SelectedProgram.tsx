@@ -3,16 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Typewriter } from 'react-simple-typewriter';
 import Program from '../../interfaces/Program';
 import { useAddProgramToCalendarMutation } from '../../redux/features/calendar/calendarApi';
-import { setSelectingProgramStatus, setProgramSelected, calendarSlice, setDateClickedForProgram } from '../../redux/features/calendar/calendarSlice';
+import { setSelectingProgramStatus, setProgramSelected, calendarSlice, setDateClickedForProgram, } from '../../redux/features/calendar/calendarSlice';
 import styles from './SelectedProgram.module.css';
 import { RootState } from '../../store'
 import { DateTime, Duration } from 'luxon';
+import { setHideSearchBar } from '../../redux/features/user/userSlice';
 
 const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: string | undefined, program: Program, changeSelectedProgram: () => void}) => {
     const [stage, setStage] = useState<number | null>(null);
     const dispatch = useDispatch();
     const { dateClickedForProgram, programSelected, spacedMonthAndYear, monthAndYear } = useSelector((state: RootState) => state[calendarSlice.name]);
     const [addProgramToCalendar] = useAddProgramToCalendarMutation();
+
+    useEffect(() => {
+        dispatch(setHideSearchBar(true));
+    }, [dispatch])
 
     useEffect(() => {
             dispatch(setDateClickedForProgram(null));

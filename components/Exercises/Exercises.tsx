@@ -9,8 +9,10 @@ import Exercise from './Exercise/Exercise'
 import ExerciseInterface from '../../interfaces/Exercise'
 import { uid } from 'uid'
 import { Area } from '../../interfaces/AreaTargeted';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setIsCalendarExpanded } from "../../redux/features/calendar/calendarSlice"
+import { setClickedOnButton, setSearchedItems, userSlice, setHideSearchBar } from '../../redux/features/user/userSlice'
+import { RootState } from '../../store';
 
 const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterface[], userId: string | undefined, pageLoadingStatus: boolean}) => {
     const [exercises, setExercises] = useState<ExerciseInterface[] | null>(data);
@@ -25,10 +27,10 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
                                                         { id: '9', name: 'Hamstrings', selected: false }, { id: '10', name: 'Calves', selected: false },
                                                         { id: '11', name: 'Lats', selected: false }, { id: '12', name: 'Obliques',selected: false },
                                                         { id: '13', name: 'Trapezius', selected: false }])
-    const [search, setSearch] = useState('');
     const [searchedExercises, setSearchedExercises] = useState<ExerciseInterface[]>([]);
     const dispatch = useDispatch();
     const [startup, setStartup]  = useState(false)
+    const { search, clickedOnButton } = useSelector((state: RootState) => state[userSlice.name])
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
@@ -36,6 +38,7 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
         tolerance: 5
         }
     });
+
     const touchSensor = useSensor(TouchSensor, {
         activationConstraint: {
         delay: 250,
@@ -51,6 +54,15 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
     );
 
     useEffect(() => {
+        if (clickedOnButton){
+            dispatch(setIsCalendarExpanded(false)),
+            dispatch(setHideSearchBar(true))
+            setExerciseEditor({ ...exerciseEditor, mode: 'create' })
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clickedOnButton])
+
+    useEffect(() => {
         setTimeout(() => setStartup(true), 200)
     }, [])
 
@@ -59,9 +71,9 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
     }, [data])
 
     useEffect(() => {
-        if (exercises && search.trim() !== ''){
+        if (exercises && search.value.trim() !== ''){
             const tempExercises = exercises?.filter(exercise => {
-                return exercise.name.toLowerCase().includes(search.toLowerCase())
+                return exercise.name.toLowerCase().includes(search.value.toLowerCase())
             })
             setSearchedExercises(tempExercises)
         }
@@ -108,6 +120,8 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
             return area
         }));
 
+        dispatch(setHideSearchBar(false))
+        dispatch(setClickedOnButton(false));
         setExerciseEditor({ mode: 'none', data: { id: '', name: '', areasTargeted: [{ id: '', name: '' as Area }] } });
         dispatch(setIsCalendarExpanded(true));
     }
@@ -132,6 +146,8 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
             return area
         }));
 
+        dispatch(setHideSearchBar(false))
+        dispatch(setClickedOnButton(false));
         addUserSavedExercise({ userId, exercise: tempExerciseEditor.data });
         setExerciseEditor({ mode: 'none', data: { id: '', name: '', areasTargeted: [{ id: '', name: '' as Area }] } });
         dispatch(setIsCalendarExpanded(true));
@@ -139,10 +155,10 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
     
     return(
         <ul className={styles.container} style={{opacity: (pageLoadingStatus || !startup) ? '0' : '1'}}>
-            <div className={styles.searchExerciseNameAndButton} style={{display: 'flex', justifyContent: 'space-between'}}>
+            {/* <div className={styles.searchExerciseNameAndButton} style={{display: 'flex', justifyContent: 'space-between'}}>
                 <input type="text" placeholder='Search Exercises...' value={search} onChange={e => setSearch(e.target.value)} style={{all: 'unset', color: 'var(--charcoal)', fontSize: '0.9rem', width: '100%' }}/>
                 {exerciseEditor.mode === 'none' && <button style={{ padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => (setExerciseEditor({ ...exerciseEditor, mode: 'create' }), dispatch(setIsCalendarExpanded(false)) )} >New Exercise</button>}
-            </div>
+            </div> */}
             {exerciseEditor.mode === 'create' &&
                 <div style={{display: 'flex', flexDirection: 'column', padding: '0.5rem', marginBottom: '0.5rem', gap: '1rem', border: '1px black solid', alignItems: 'center'}}>
                     <input className={styles.exerciseCreatorName} onChange={e => setExerciseEditor({ ...exerciseEditor, data: { ...exerciseEditor.data, name: e.target.value }})} value={exerciseEditor.data.name} type="text" placeholder='New Exercise Name' style={{all: 'unset', color: 'var(--charcoal)', textAlign: 'center', width: '100%'}}/>
@@ -163,7 +179,7 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
                 </div>
             }
             <div className={styles.innerContainer}>
-                {search.trim() === '' && exercises &&
+                {search.value.trim() === '' && exercises &&
                     <DndContext onDragEnd={handleDragEndScrollEvent} sensors={sensors} modifiers={[restrictToParentElement, restrictToVerticalAxis]}>
                         <SortableContext items={exercises.map(exercise => 'sortable-' + exercise.id)} strategy={verticalListSortingStrategy}>
                             {exercises.map((exercise: ExerciseInterface) => {
@@ -173,7 +189,7 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
                             })}
                         </SortableContext>
                     </DndContext>}
-                {search.trim() !== '' && searchedExercises.map((exercise: ExerciseInterface) => {
+                {search.value.trim() !== '' && searchedExercises.map((exercise: ExerciseInterface) => {
                     return <Exercise key={exercise.id} exercise={exercise} userId={userId} />
                 })}
             </div>

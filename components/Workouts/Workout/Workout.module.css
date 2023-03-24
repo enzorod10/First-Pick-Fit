@@ -7,6 +7,7 @@
     border: 1px var(--charcoal) solid;
     padding: 0.5rem;
     color: var(--charcoal);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 4px 0px;
 }
 
 .areasTargeted{
@@ -31,6 +32,7 @@
     border-radius: 5px;
     pointer-events: none;
     padding: 3px;
+    box-shadow: rgba(0, 0, 0, 0.10) 0px 4px 4px 0px;
 }
 
 .areasTargeted > li > p{

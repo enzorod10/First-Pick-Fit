@@ -8,6 +8,8 @@
     position: relative;
     flex-direction: column;
     overflow-x: hidden;
+    box-shadow: rgba(0, 0, 0, 0.10) 0px 4px 4px 0px;
+    border-radius: 2px;
 }
 
 .definedCellContainer{
@@ -19,15 +21,4 @@
     white-space: nowrap;
     overflow: hidden;
     max-width: 100%;
-}
-
-.deleteButton{
-    all: unset;
-    display: none;
-}
-
-@media screen and (min-width: 600px){
-    .deleteButton{
-        display: flex;
-    }
 }

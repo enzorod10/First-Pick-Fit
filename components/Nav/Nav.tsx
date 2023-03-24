@@ -1,11 +1,13 @@
 import { signOut } from 'firebase/auth';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth } from '../../firebase/clientApp';
 import { calendarSlice, setDateClicked, setIsCalendarExpanded } from '../../redux/features/calendar/calendarSlice';
-import { setPageLoadingStatus } from '../../redux/features/user/userSlice';
+import { setClickedOnButton, setPageLoadingStatus, setSearchedItems, setHideSearchBar } from '../../redux/features/user/userSlice';
 import { RootState } from '../../store';
+
 import styles from './Nav.module.css';
 
 const Nav = () => {
@@ -18,6 +20,9 @@ const Nav = () => {
             dispatch(setDateClicked(null));
         }
         if (router.pathname !== pathname){
+            dispatch(setSearchedItems({value: '', type: router.pathname}));
+            dispatch(setClickedOnButton(false));
+            dispatch(setHideSearchBar(false));
             dispatch(setPageLoadingStatus(true))
             router.events.on('routeChangeComplete', () => dispatch(setPageLoadingStatus(false)))
             if (!calendarExpanded){
@@ -45,7 +50,7 @@ const Nav = () => {
                 <span className={`${router.pathname === '/exercises' && styles.active}`}>Exercises</span>
             </li>
             <li onClick={() => signOut(auth)}>
-                <span className={`${router.pathname === '/signout' && styles.active}`}>Sign Out</span>
+                <Image src='/images/icons/logout.png' alt='logout' width='18' height='18' />
             </li>
         </ul>
     );

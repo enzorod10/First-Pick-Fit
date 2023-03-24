@@ -3,16 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Typewriter } from 'react-simple-typewriter';
 import Program from '../../interfaces/Program';
 import { useAddProgramToCalendarMutation } from '../../redux/features/calendar/calendarApi';
-import { setSelectingProgramStatus, setProgramSelected, calendarSlice, setDateClickedForProgram } from '../../redux/features/calendar/calendarSlice';
+import { setSelectingProgramStatus, setProgramSelected, calendarSlice, setDateClickedForProgram, } from '../../redux/features/calendar/calendarSlice';
 import styles from './SelectedProgram.module.css';
 import { RootState } from '../../store'
 import { DateTime, Duration } from 'luxon';
+import { setHideSearchBar } from '../../redux/features/user/userSlice';
 
 const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: string | undefined, program: Program, changeSelectedProgram: () => void}) => {
     const [stage, setStage] = useState<number | null>(null);
     const dispatch = useDispatch();
     const { dateClickedForProgram, programSelected, spacedMonthAndYear, monthAndYear } = useSelector((state: RootState) => state[calendarSlice.name]);
     const [addProgramToCalendar] = useAddProgramToCalendarMutation();
+
+    useEffect(() => {
+        dispatch(setHideSearchBar(true));
+    }, [dispatch])
 
     useEffect(() => {
             dispatch(setDateClickedForProgram(null));
@@ -46,15 +51,15 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
     return(
         <div className={styles.container}>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <button style={{ padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}onClick={changeSelectedProgram}>
+                <button style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}onClick={changeSelectedProgram}>
                     Back
                 </button>
                 {stage === null &&
-                <button style={{ padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => setStage(0)}>
+                <button style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => setStage(0)}>
                     Add Program To Calendar
                 </button>}
                 {stage === 1 && 
-                <button onClick={handleAddProgramToCalendar} style={{ padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>
+                <button onClick={handleAddProgramToCalendar} style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>
                     Confirm
                 </button>}
             </div>

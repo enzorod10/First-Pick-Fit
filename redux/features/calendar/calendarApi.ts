@@ -33,13 +33,12 @@ export const calendarApi = createApi({
                     let data: any;
                     let olderDate: boolean = false
 
-                    if ((Number(monthAndYear.split('_')[1])  > currentYear) || ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && Number(monthSelected) > currentMonth))){
-                        data = snapshot.docs.filter(snap => {
-                            return snap.data()
-                        })[0]
-                    } if ((Number(monthAndYear.split('_')[1])  < currentYear) || ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && Number(monthSelected) < currentMonth))){
+                    if ((Number(monthAndYear.split('_')[1])  > currentYear) || ((Number(monthAndYear.split('_')[1]) === currentYear) && (Number(monthSelected) > currentMonth))){
+                        let orderedWorkouts = snapshot.docs.sort((a, b) => a.data().date - b.data().date)
+                        data = orderedWorkouts[0]
+                    } if ((Number(monthAndYear.split('_')[1])  < currentYear) || ((Number(monthAndYear.split('_')[1]) === currentYear) && (Number(monthSelected) < currentMonth))){
                         olderDate = true;
-                    } if ((Number(monthAndYear.split('_')[1]) === currentYear) && (monthSelected && Number(monthSelected) === currentMonth)){
+                    } if ((Number(monthAndYear.split('_')[1]) === currentYear) && (Number(monthSelected) === currentMonth)){
                         let orderedWorkouts = snapshot.docs.sort((a, b) => a.data().date - b.data().date)
                         data = orderedWorkouts.find(workout => workout.data().date >= currentDate)
                     }

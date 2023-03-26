@@ -12,8 +12,9 @@ import { setHideSearchBar } from '../../redux/features/user/userSlice';
 const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: string | undefined, program: Program, changeSelectedProgram: () => void}) => {
     const [stage, setStage] = useState<number | null>(null);
     const dispatch = useDispatch();
-    const { dateClickedForProgram, programSelected, spacedMonthAndYear, monthAndYear } = useSelector((state: RootState) => state[calendarSlice.name]);
+    const { dateClickedForProgram, spacedMonthAndYear } = useSelector((state: RootState) => state[calendarSlice.name]);
     const [addProgramToCalendar] = useAddProgramToCalendarMutation();
+    const [programDateRange, setProgramDateRange] = useState<[string, string] | null>(null)
 
     useEffect(() => {
         dispatch(setHideSearchBar(true));
@@ -39,10 +40,12 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
 
 
     useEffect(() => {
-        if (stage === 0 && dateClickedForProgram){
-            setStage(1);
+        if ((stage === 0 || stage === 1)&& dateClickedForProgram){
+            setProgramDateRange([spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], DateTime.fromFormat(spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], 'MMMM d, yyyy').plus(Duration.fromObject({ weeks: program.duration })).toFormat('MMMM d, yyyy')] )
+            stage !== 1 && setStage(1);
         }
-    }, [dateClickedForProgram, stage])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dateClickedForProgram])
 
     const handleAddProgramToCalendar = () => {
         addProgramToCalendar({ userId, program, startDate: spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], endDate: DateTime.fromFormat(spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], 'MMMM d, yyyy').plus(Duration.fromObject({ weeks: program.duration })).toFormat('MMMM d, yyyy') })
@@ -50,7 +53,7 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
     
     return(
         <div className={styles.container}>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <div style={{ boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.10)', padding: '1rem 1rem 0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <button style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}onClick={changeSelectedProgram}>
                     Back
                 </button>
@@ -62,12 +65,10 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
                 <button onClick={handleAddProgramToCalendar} style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>
                     Confirm
                 </button>}
-            </div>
-           
-            {stage === 0 && 
+                {stage === 0 && 
                 <div style={{ color: 'var(--charcoal)', fontSize: '0.9rem', lineHeight: '20px', fontWeight: 'bold', zIndex: '2', position: 'relative'}}>
                     <Typewriter
-                        words={['Click on any date to set a start date for this program.']}
+                        words={['Click on any date to set a start date.']}
                         loop={1}
                         cursor
                         cursorStyle='|'
@@ -76,9 +77,11 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
                         delaySpeed={2000}
                     />
                 </div>}
+            </div>
+
             {stage === 1 && 
-                <div style={{ color: 'var(--charcoal)', fontSize: '0.9rem', fontWeight: 'bold', lineHeight: '20px', zIndex: '2', position: 'relative'}}>
-                    This program will start on {spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1]} and finish on {DateTime.fromFormat(spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], 'MMMM d, yyyy').plus(Duration.fromObject({ weeks: program.duration })).toFormat('MMMM d, yyyy')}.
+                <div style={{ color: 'var(--charcoal)', padding: '0.5rem 0.5rem 0rem 0.5rem', fontSize: '0.9rem', fontWeight: 'bold', lineHeight: '20px', zIndex: '2', position: 'relative'}}>
+                    This program will start on {programDateRange && programDateRange[0]} and finish on program {programDateRange && programDateRange[1]}.
                     Click confirm to add it to your calendar.
                 </div>
             }

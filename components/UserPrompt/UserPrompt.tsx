@@ -58,7 +58,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
 
     const UserHasUpcomingWorkoutRender: any = () => {
         return(
-            <div style={{display: 'flex', flexDirection: 'column'}}>
+            <div style={{display: 'flex', flexDirection: 'column', overflowY: 'hidden'}}>
                 <div style={{lineHeight: '20px'}}>
                     The next workout you have planned for the month you are viewing is on <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>{spacedMonthAndYear.split(' ')[0]} {data.date} </span> {' '} 
                     and it is called {' '} <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>{data.workout.name}.</span> {' '}
@@ -134,7 +134,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
     
     const ClickedOnWorkoutInformationRender = () => {
         return(
-            <div style={{display: 'flex', flexDirection: 'column', gap: '0rem', }}>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '0rem', overflowY: 'hidden'}}>
                 <span style={{lineHeight: '20px'}}>
                     You clicked on{' '}
                     <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>

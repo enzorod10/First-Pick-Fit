@@ -8,8 +8,13 @@
     position: relative;
     flex-direction: column;
     overflow-x: hidden;
+    overflow-y: hidden;
     box-shadow: rgba(0, 0, 0, 0.10) 0px 4px 4px 0px;
     border-radius: 2px;
+}
+
+.undefinedCellContainer{
+    opacity: 0.35;
 }
 
 .definedCellContainer{

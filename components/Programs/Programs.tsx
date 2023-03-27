@@ -1,13 +1,8 @@
-import { uid } from 'uid';
 import styles from './Programs.module.css';
 import Program from '../../interfaces/Program';
-import AreaTargeted from '../../interfaces/AreaTargeted';
-import AllocatedExercise from '../../interfaces/AllocatedExercise';
-import { db } from '../../firebase/clientApp';
-import { doc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import SelectedProgram from './SelectedProgram';
-import { setClickedOnButton, setSearchedItems, setHideSearchBar, userSlice } from '../../redux/features/user/userSlice'
+import { setHideSearchBar, userSlice } from '../../redux/features/user/userSlice'
 import { RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,23 +13,8 @@ const Programs = ({ data, userId }: { data: Program[], userId: string | undefine
     const { search } = useSelector((state: RootState) => state[userSlice.name]);
     const dispatch = useDispatch();
     
-    const sortUniqueAreas = (exercises: AllocatedExercise[]): AreaTargeted[] => {
-        const counts: {[key: string]: {count: number, id: string}} = exercises.reduce((acc: any, curr: any) => {
-            curr.areasTargeted && curr.areasTargeted.forEach((areaTargeted: AreaTargeted) => {
-                if (areaTargeted.name in acc) {
-                acc[areaTargeted.name].count++;
-                } else {
-                acc[areaTargeted.name] = {count: 1, id: areaTargeted.id};
-                }
-            });
-            return acc;
-            }, {});
 
-            const uniqueArr = Object.entries(counts).sort((a, b) => b[1].count - a[1].count).map((item: any) => ({name: item[0], id: item[1].id}));
-        
-            return uniqueArr;
-    }
-
+    // utilized to add program in dev
     // const addButton = async () => {
     //     const newcollection = await setDoc(doc(db, 'program', program.id), program)
     // }
@@ -57,10 +37,6 @@ const Programs = ({ data, userId }: { data: Program[], userId: string | undefine
 
     return !selectedProgram ?
         <div className={styles.container}>
-            {/* <button onClick={() => addButton()}> Add </button> */}
-            {/* <div className={styles.searchProgramNameAndButton} style={{display: 'flex', justifyContent: 'space-between'}}>
-                <input type="text" placeholder='Search Programs...' value={search} onChange={e => setSearch(e.target.value)} style={{all: 'unset', color: 'var(--charcoal)', fontSize: '0.9rem', width: '100%' }}/>
-            </div> */}
             <div className={styles.innerContainer}>
                 {search.value.trim() === '' ? data?.map((program: Program) => {
                     return(

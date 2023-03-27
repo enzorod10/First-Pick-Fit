@@ -19,11 +19,11 @@ import {
   DragOverlay,
 } from '@dnd-kit/core';
 import {
-  snapCenterToCursor,
   restrictToWindowEdges
 } from '@dnd-kit/modifiers'
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { newUser } from '../components/Signup/Signup';
 
 export default function App({ Component, pageProps, ...appProps }: AppProps) {
   const [activeElement, setActiveElement] = useState<any>(null)
@@ -39,6 +39,9 @@ export default function App({ Component, pageProps, ...appProps }: AppProps) {
   onAuthStateChanged(auth, (user) => {
     if (user){
         store.dispatch(setUserStatus({ loginStatus: true, userId: user.uid}))
+        if (user.providerData[0].providerId === 'google.com' && user.metadata.creationTime === user.metadata.lastSignInTime){
+          newUser();
+        }
     } else {
         store.dispatch(setUserStatus({ loginStatus: false } ))
     }

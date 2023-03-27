@@ -138,25 +138,11 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
                 <span style={{lineHeight: '20px'}}>
                     You clicked on{' '}
                     <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>
-                        <Typewriter
-                            words={[`${spacedMonthAndYear.split(' ')[0]} ${clickedOnDateResult.data.date}, ${spacedMonthAndYear.split(' ')[1]}. `]}
-                            loop={1}
-                            cursor
-                            cursorStyle=' '
-                            typeSpeed={100}
-                            deleteSpeed={50}
-                            delaySpeed={2000}/>
+                        {' '}{spacedMonthAndYear.split(' ')[0]} {clickedOnDateResult.data.date}, {spacedMonthAndYear.split(' ')[1]}.{' '}
                     </span>
                     The workout for this day is called{' '}
                     <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>
-                        <Typewriter
-                            words={[`${clickedOnDateResult.data.workout.name}. `]}
-                            loop={1}
-                            cursor
-                            cursorStyle=' '
-                            typeSpeed={100}
-                            deleteSpeed={50}
-                            delaySpeed={2000}/>
+                        {clickedOnDateResult.data.workout.name}.{' '}
                     </span>
                     Here is more information on it:
                 </span>
@@ -197,15 +183,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
         <div className={styles.container} style={{opacity: (pageLoadingStatus || !startup) ? '0' : '1'}}>
             { skip[1] && <div style={{lineHeight: '20px'}}>Today is
                 <span style={{ color: 'var(--charcoal)', fontWeight: 'bold' }}>
-                    <Typewriter
-                    words={[` ${DateTime.now().toFormat('MMMM d, yyyy')}. `]}
-                    loop={1}
-                    cursor
-                    cursorStyle=' '
-                    typeSpeed={100}
-                    deleteSpeed={50}
-                    delaySpeed={1000}
-                    />
+                    {' '}{DateTime.now().toFormat('MMMM d, yyyy')}.{' '}
                 </span>
                 Click on any date on the calendar to get information about a workout
                 scheduled for that day. 

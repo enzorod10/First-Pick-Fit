@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Typewriter } from 'react-simple-typewriter';
 import Program from '../../interfaces/Program';
 import { useAddProgramToCalendarMutation } from '../../redux/features/calendar/calendarApi';
-import { setSelectingProgramStatus, setProgramSelected, calendarSlice, setDateClickedForProgram, } from '../../redux/features/calendar/calendarSlice';
+import { setSelectingProgramStatus, setProgramSelected, calendarSlice, setDateClickedForProgram, setProgramDates, setAddingProgramStatus } from '../../redux/features/calendar/calendarSlice';
 import styles from './SelectedProgram.module.css';
 import { RootState } from '../../store'
 import { DateTime, Duration } from 'luxon';
@@ -13,8 +13,14 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
     const [stage, setStage] = useState<number | null>(null);
     const dispatch = useDispatch();
     const { dateClickedForProgram, spacedMonthAndYear } = useSelector((state: RootState) => state[calendarSlice.name]);
-    const [addProgramToCalendar] = useAddProgramToCalendarMutation();
+    const [addProgramToCalendar, result] = useAddProgramToCalendarMutation();
     const [programDateRange, setProgramDateRange] = useState<[string, string] | null>(null)
+
+    useEffect(() => {
+        if (!result.isUninitialized && (result.isError || result.isSuccess)){
+            dispatch(setAddingProgramStatus(false))
+        }
+    }, [dispatch, result])
 
     useEffect(() => {
         dispatch(setHideSearchBar(true));
@@ -40,15 +46,28 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
 
 
     useEffect(() => {
-        if ((stage === 0 || stage === 1)&& dateClickedForProgram){
-            setProgramDateRange([spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], DateTime.fromFormat(spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], 'MMMM d, yyyy').plus(Duration.fromObject({ weeks: program.duration })).toFormat('MMMM d, yyyy')] )
+        if ((stage === 0 || stage === 1) && dateClickedForProgram){
+            let dateArray: string[] = [];
+            for (let i=0; i<program.duration; i++){
+                for (let q=0; q<7; q++){
+                    if (program.shape[q] === null){
+                        continue;
+                    } else{
+                        let dateToUse = DateTime.fromFormat(spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], 'MMMM d, yyyy').plus(Duration.fromObject({ days: (i*7) + q }));
+                        dateArray.push(dateToUse.toFormat('MMMM d, yyyy'))
+                    }
+                }
+            }
+            dispatch(setProgramDates(dateArray));
+            setProgramDateRange([dateArray[0], dateArray[dateArray.length - 1]] )
             stage !== 1 && setStage(1);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateClickedForProgram])
 
     const handleAddProgramToCalendar = () => {
-        addProgramToCalendar({ userId, program, startDate: spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], endDate: DateTime.fromFormat(spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1], 'MMMM d, yyyy').plus(Duration.fromObject({ weeks: program.duration })).toFormat('MMMM d, yyyy') })
+        dispatch(setAddingProgramStatus(true))
+        addProgramToCalendar({ userId, program, startDate: spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1] })
     }
     
     return(
@@ -68,7 +87,7 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
                 {stage === 0 && 
                 <div style={{ color: 'var(--charcoal)', fontSize: '0.9rem', lineHeight: '20px', fontWeight: 'bold', zIndex: '2', position: 'relative'}}>
                     <Typewriter
-                        words={['Click on any date to set a start date.']}
+                        words={['Set a start date by clicking on a date.']}
                         loop={1}
                         cursor
                         cursorStyle='|'
@@ -81,7 +100,7 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
 
             {stage === 1 && 
                 <div style={{ color: 'var(--charcoal)', padding: '0.5rem 0.5rem 0rem 0.5rem', fontSize: '0.9rem', fontWeight: 'bold', lineHeight: '20px', zIndex: '2', position: 'relative'}}>
-                    This program will start on {programDateRange && programDateRange[0]} and finish on program {programDateRange && programDateRange[1]}.
+                    This program will start on {programDateRange && programDateRange[0]} and finish on {programDateRange && programDateRange[1]}.
                     Click confirm to add it to your calendar.
                 </div>
             }

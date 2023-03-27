@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, arrayUnion, deleteDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, getDoc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { DateTime, Duration } from 'luxon';
 import { db } from '../../../firebase/clientApp';
 import Program from '../../../interfaces/Program';
@@ -27,7 +27,7 @@ export const calendarApi = createApi({
         }),
         getUserNextWorkout: builder.query<any, { userId: string | undefined, monthAndYear: string, currentDate: number, currentMonth: number, monthSelected: number | null, currentYear: number }>({
             async queryFn( { userId, monthAndYear, currentDate, currentMonth, monthSelected, currentYear }){
-                if (userId){
+                if (userId && monthAndYear){
                     const snapshot = await getDocs(collection(db, `user/${userId}/${monthAndYear}`))
 
                     let data: any;
@@ -107,8 +107,9 @@ export const calendarApi = createApi({
                 return [{ type: 'Day', id: date }, { type: 'Month', id: monthAndYear.split('_')[0]} ]
             }
         }),
-        addProgramToCalendar: builder.mutation<null,  { userId: string | undefined, startDate: string, endDate: string, program: Program }>({
-            async queryFn({ userId, program, startDate, endDate }){
+        addProgramToCalendar: builder.mutation<{ type: 'Month' | 'Day', id: string | number }[],  { userId: string | undefined, startDate: string, program: Program }>({
+            async queryFn({ userId, program, startDate }){
+                let dateArray: { type: 'Month' | 'Day', id: string | number }[] = [];
                 if (userId){
                     for (let i=0; i<program.duration; i++){
                         for (let q=0; q<7; q++){
@@ -116,14 +117,15 @@ export const calendarApi = createApi({
                                 continue;
                             } else{
                                 let dateToUse = DateTime.fromFormat(startDate, 'MMMM d, yyyy').plus(Duration.fromObject({ days: (i*7) + q }));
-                                console.log(dateToUse.toFormat('MMMM d, yyyy'))
+                                dateArray.push({ type: 'Month', id: dateToUse.toFormat('MMMM').toLowerCase()}, { type: 'Day', id: Number(dateToUse.toFormat('d'))})
                                 await setDoc(doc(db, 'user', userId, dateToUse.toFormat('MMMM_yyyy').toLocaleLowerCase(), dateToUse.toFormat('d')), { date: Number(dateToUse.toFormat('d')), workout: program.workouts[program.shape[q]!] })
                             }
                         }
                     }
-                    return { data: null }
+                    return { data: dateArray }
                 } else return { error: 'Error'}
             },
+            invalidatesTags: (result, error) => result ? result : []
         }),
     })
 })

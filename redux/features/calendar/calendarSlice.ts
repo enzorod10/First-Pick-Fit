@@ -9,7 +9,9 @@ interface InitialState{
     programSelected: Program | null, 
     monthSelected: number | null,
     calendarExpanded: boolean
-    selectingProgramStatus: boolean
+    selectingProgramStatus: boolean,
+    addingProgramDates: boolean,
+    programDates: string[] | null
 } 
 
 const initialState: InitialState = {
@@ -20,7 +22,9 @@ const initialState: InitialState = {
     monthSelected: null,
     calendarExpanded: true,
     programSelected: null, 
-    selectingProgramStatus: false
+    selectingProgramStatus: false,
+    addingProgramDates: false,
+    programDates: null
 }
 
 export const calendarSlice = createSlice({
@@ -46,10 +50,17 @@ export const calendarSlice = createSlice({
         },
         setSelectingProgramStatus: (state, action) => {
             state.selectingProgramStatus = action.payload;
-        } 
+        },
+        setAddingProgramStatus: (state, action) => {
+            state.addingProgramDates = action.payload;
+        },
+        setProgramDates: (state, action) => {
+            state.programDates = action.payload;
+        }
+
     },
 })
 
-export const { setMonthAndYear, setDateClicked, setIsCalendarExpanded, setSelectingProgramStatus, setProgramSelected, setDateClickedForProgram } = calendarSlice.actions;
+export const { setMonthAndYear, setDateClicked, setIsCalendarExpanded, setSelectingProgramStatus, setProgramSelected, setProgramDates, setAddingProgramStatus, setDateClickedForProgram } = calendarSlice.actions;
 
 export default calendarSlice.reducer

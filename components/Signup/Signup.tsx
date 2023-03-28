@@ -59,7 +59,7 @@ export default function Signup({ windowSize, changeAuthStage }: { windowSize: { 
                     <label htmlFor="password">Confirm Password</label>
                     <input style={{padding: '10px 15px', borderRadius: '5px', border: '1px var(--charcoal) solid'}} type="password" id='confirmPassword' value={userInfo.confirmPassword} placeholder='*******' onChange={ev => (setErrorMessage(''), setUserInfo( { ...userInfo, confirmPassword: ev.currentTarget.value }))}/>
                 </div>
-                <button style={{padding: '10px 0px', width: '100%', fontSize: '0.9rem', backgroundColor: 'var(--oxford-blue)', borderRadius: '5px', color: 'white'}} type='button' onClick={validateInfo}> Sign up</button>
+                <button style={{padding: '10px 0px', width: '100%', fontSize: '0.9rem', backgroundColor: 'var(--oxford-blue)', borderRadius: '5px', color: 'white', fontWeight: 'bold',}} type='button' onClick={validateInfo}> Sign up</button>
                 <button onClick={() => signInWithRedirect(auth, googleProvider)} style={{display: 'flex', fontSize: '0.9rem', fontWeight: 'bold', justifyContent: 'center', gap: '10px', backgroundColor: 'white', border: '1px var(--charcoal) solid', alignItems: 'center', padding: '10px 0px', width: '100%', borderRadius: '5px', color: 'var(--oxford-blue)'}} type='button'> 
                     <Image style={{}} src='/images/icons/google.png' alt='Google' height='15' width='15'/>
                     Sign In with Google
@@ -67,7 +67,7 @@ export default function Signup({ windowSize, changeAuthStage }: { windowSize: { 
                 <div style={{width: '100%'}}>
                     Already have an account? <span style={{color: 'var(--oxford-blue)', fontWeight: 'bold', cursor: 'pointer'}} onClick={() => changeAuthStage()}> Sign In </span>
                 </div>
-                {errorMessage !== '' && <span style={{position: 'absolute', color: 'red', fontSize: '13px', bottom: '-25px', left: 0}}> {errorMessage} </span>}
+                {errorMessage !== '' && <span style={{position: 'absolute', color: '#d73b3e', fontSize: '13px', bottom: '-25px', left: 0}}> {errorMessage} </span>}
             </form>
             <div style={{margin: 'auto auto', fontSize: '0.8rem'}}>
                 &copy;2023 Enzo All rights reserved.

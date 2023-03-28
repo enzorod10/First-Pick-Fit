@@ -17,6 +17,12 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
     const [programDateRange, setProgramDateRange] = useState<[string, string] | null>(null)
 
     useEffect(() => {
+        return(() => {
+            dispatch(setAddingProgramStatus(false))
+        })
+    }, [dispatch])
+
+    useEffect(() => {
         if (!result.isUninitialized && (result.isError || result.isSuccess)){
             setStage(null);
             dispatch(setAddingProgramStatus(false))

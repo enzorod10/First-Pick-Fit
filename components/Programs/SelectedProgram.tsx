@@ -18,6 +18,7 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
 
     useEffect(() => {
         if (!result.isUninitialized && (result.isError || result.isSuccess)){
+            setStage(null);
             dispatch(setAddingProgramStatus(false))
         }
     }, [dispatch, result])
@@ -67,6 +68,7 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
 
     const handleAddProgramToCalendar = () => {
         dispatch(setAddingProgramStatus(true))
+        setStage(2);
         addProgramToCalendar({ userId, program, startDate: spacedMonthAndYear.split(' ')[0] + ' ' + dateClickedForProgram + ', ' + spacedMonthAndYear.split(' ')[1] })
     }
     
@@ -88,6 +90,18 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
                 <div style={{ color: 'var(--charcoal)', fontSize: '0.9rem', lineHeight: '20px', fontWeight: 'bold', zIndex: '2', position: 'relative'}}>
                     <Typewriter
                         words={['Set a start date by clicking on a date.']}
+                        loop={1}
+                        cursor
+                        cursorStyle='|'
+                        typeSpeed={120}
+                        deleteSpeed={50}
+                        delaySpeed={2000}
+                    />
+                </div>}
+                {stage === 2 && 
+                <div style={{ color: 'var(--charcoal)', fontSize: '0.9rem', lineHeight: '20px', fontWeight: 'bold', zIndex: '2', position: 'relative'}}>
+                    <Typewriter
+                        words={['Adding program...']}
                         loop={1}
                         cursor
                         cursorStyle='|'

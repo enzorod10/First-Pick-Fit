@@ -71,10 +71,10 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
     const WorkoutExerciseRenderedOnDashboard = ( { workout }: {workout: Workout}) => {
         return(
             <div className={styles.workoutContainer}>
-                <h3 style={{fontSize: '0.9rem', color: 'var(--oxford-blue)',}}>
+                <h3 style={{fontSize: '0.9rem', color: 'var(--oxford-blue)', userSelect: 'none'}}>
                     Muscles Targeted
                 </h3>
-                <ul className={styles.areasTargeted}>
+                <ul className={styles.areasTargeted} style={{ userSelect: 'none' }}>
                     {workout.areasTargeted.map((area, index) => {
                         return (
                             <li key={area.id}>
@@ -83,7 +83,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
                             </li>)
                     })}
                 </ul>
-                <h3 style={{fontSize: '0.9rem', color: 'var(--oxford-blue)'}}>
+                <h3 style={{ userSelect: 'none', fontSize: '0.9rem', color: 'var(--oxford-blue)' }}>
                     Exercises
                 </h3>
                 {workout.exercises.map((exercise: AllocatedExercise, index: number) => {
@@ -115,19 +115,19 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
                                 </ul>
                             </div>
                 )})}
-                <h3 style={{fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--oxford-blue)'}}>
-                    <span>
+                <h3 onClick={() => changeUserWorkoutCompleteStatus({userId, monthAndYear, date: (data?.date) ?? (clickedOnDateResult?.data?.date)})} style={{fontSize: '0.9rem', userSelect: 'none', cursor: 'pointer', width: 'fit-content', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--oxford-blue)'}}>
+                    <span >
                         Mark Complete?
                     </span>
-                    <div onClick={() => changeUserWorkoutCompleteStatus({userId, monthAndYear, date: (data?.date) ?? (clickedOnDateResult?.data?.date)})} style={{boxSizing: 'border-box', border: workout.complete ? 'none' : '1px var(--cambridge-blue) solid', backgroundColor: workout.complete ? 'var(--cambridge-blue)' : 'none', borderRadius: '50%', width: '15px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <div style={{boxSizing: 'border-box', border: workout.complete ? 'none' : '1px var(--cambridge-blue) solid', backgroundColor: workout.complete ? 'var(--cambridge-blue)' : 'none', borderRadius: '50%', width: '15px', height: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                         <Image src='/images/icons/checkmark.png' alt='checkmark' width='10' height='10'/>
                     </div>
                 </h3>
-                <h3 style={{fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--oxford-blue)'}}>
+                <h3 onClick={removeFromCalendar} style={{ cursor: 'pointer', userSelect: 'none', width: 'fit-content', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--oxford-blue)'}}>
                     <span>
                         Remove From Calendar? 
                     </span>
-                    <Image onClick={removeFromCalendar} src='/images/icons/remove.png' alt='removeIcon' width='15' height='15'/>
+                    <Image src='/images/icons/remove.png' alt='removeIcon' width='15' height='15'/>
                 </h3>
             </div>)
     }

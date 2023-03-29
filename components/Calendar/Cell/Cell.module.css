@@ -19,6 +19,7 @@
 
 .definedCellContainer{
     font-size: 0.7em;
+    cursor: pointer;
 }
 
 .definedCellContainer > span{
@@ -27,3 +28,9 @@
     overflow: hidden;
     max-width: 100%;
 }
+
+@media (min-width: 768px) {
+    .definedCellContainer:hover {
+        background-color: #d3d3d3;
+    }
+  }

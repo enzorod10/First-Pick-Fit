@@ -1,5 +1,5 @@
 import styles from './Workout.module.css'
-import { useAddUserSavedWorkoutExerciseMutation, useChangeWorkoutExercisesOrderMutation, useDeleteUserSavedWorkoutExerciseMutation } from '../../../redux/features/workout/workoutApi';
+import { useAddUserSavedWorkoutExerciseMutation } from '../../../redux/features/workout/workoutApi';
 import { useSelector } from 'react-redux'
 import { userSlice } from '../../../redux/features/user/userSlice';
 import { RootState } from '../../../store';
@@ -20,12 +20,8 @@ interface AppProps{
 
 const Workout = ( { workout, initiateEditMode }: AppProps) => {
     const { userId } = useSelector((state: RootState) => state[userSlice.name]);
-    const { isOver, setNodeRef } = useDroppable({ id: workout.id, data: { type: 'workoutExercisesContainer' } });
+    const { isOver } = useDroppable({ id: workout.id, data: { type: 'workoutExercisesContainer' } });
     const [addUserSavedWorkoutExercise] = useAddUserSavedWorkoutExerciseMutation();
-
-    const style = {
-        backgroundColor: isOver ? 'green' : undefined,
-    };
 
     useDndMonitor({
         onDragEnd(event: DragEndEvent){
@@ -68,12 +64,12 @@ const Workout = ( { workout, initiateEditMode }: AppProps) => {
 
 export const DraggableWorkout = (props: any) => {
     const {attributes, listeners, setNodeRef} = useDraggable({
-        id: props.workout.id, data: { type: 'workout', workout: props.workout, renderDragLayout: ({workout} : {workout: Workout}) => <div style={{fontSize: '0.6rem', padding: '0.18rem', display: 'flex', alignItems: 'flex-end', color: 'var(--charcoal)', border: '1px #0119364a solid', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: document.querySelector('#date-1')?.getBoundingClientRect().width, height: document.querySelector('#date-1')?.getBoundingClientRect().height }}> {workout.name} </div> }
+        id: props.workout.id, data: { type: 'workout', workout: props.workout, renderDragLayout: ({workout} : {workout: Workout}) => <div style={{ fontSize: '0.6rem', borderRadius: '2px', backgroundColor: 'rgba(211,211,211, 0.45)', padding: '0.18rem', display: 'flex', alignItems: 'flex-end', color: 'var(--charcoal)', border: '1px #0119364a solid', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: document.querySelector('#date-1')?.getBoundingClientRect().width, height: document.querySelector('#date-1')?.getBoundingClientRect().height }}> {workout.name} </div> }
     });
 
     return (
         <div ref={setNodeRef} style={{touchAction: 'manipulation', position: 'relative', WebkitUserSelect: 'none'}} {...attributes}>
-            <div {...listeners} style={{touchAction: 'manipulation', position:'absolute', height: '100%', width: '85px'}}></div>
+            <div {...listeners} style={{ cursor: 'move', touchAction: 'manipulation', position:'absolute', height: '100%', width: '85px'}}></div>
             {props.children}
         </div>
     )

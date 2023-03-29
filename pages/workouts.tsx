@@ -6,7 +6,7 @@ import { RootState } from '../store';
 import LoadingIcons from 'react-loading-icons';
 import { useEffect, useState } from "react";
 
-export default function Workouts({ windowSize }: { windowSize: { width: number | undefined, height: number | undefined } }) {
+export default function Workouts() {
     const { userId, pageLoadingStatus } = useSelector((state: RootState) => state[userSlice.name])
     const { data, isSuccess } = useGetUserSavedWorkoutsQuery(userId)
     const [startup, setStartup]  = useState(false)

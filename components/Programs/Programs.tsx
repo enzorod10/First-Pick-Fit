@@ -6,7 +6,7 @@ import { setHideSearchBar, userSlice } from '../../redux/features/user/userSlice
 import { RootState } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 
-const Programs = ({ data, userId }: { data: Program[], userId: string | undefined }) => {
+const Programs = ({ data, userId, windowSize }: { data: Program[], userId: string | undefined, windowSize: { width: number | undefined, height: number | undefined } }) => {
 
     const [selectedProgram, setSelectedProgram] = useState<null | Program>(null);
     const [searchedPrograms, setSearchedPrograms] = useState<Program[]>([]);
@@ -18,7 +18,6 @@ const Programs = ({ data, userId }: { data: Program[], userId: string | undefine
     // const addButton = async () => {
     //     const newcollection = await setDoc(doc(db, 'program', program.id), program)
     // }
-
 
     useEffect(() => {
         if (search.value.trim() !== ''){            
@@ -38,7 +37,7 @@ const Programs = ({ data, userId }: { data: Program[], userId: string | undefine
     return !selectedProgram ?
         <div className={styles.container}>
             <div className={styles.innerContainer}>
-                {search.value.trim() === '' ? data?.map((program: Program) => {
+                {(search.value.trim() === '' || (windowSize.width && windowSize.width >= 1000)) ? data?.map((program: Program) => {
                     return(
                         <div onClick={() => setSelectedProgram(program)} className={styles.programContainer} key={program.id}>
                             <h3 style={{fontSize: '1rem'}}>
@@ -68,7 +67,7 @@ const Programs = ({ data, userId }: { data: Program[], userId: string | undefine
                 )})}
             </div> 
         </div> :
-        <SelectedProgram program={selectedProgram} changeSelectedProgram={changeSelectedProgram} userId={userId}/>
+        <SelectedProgram windowSize={windowSize} program={selectedProgram} changeSelectedProgram={changeSelectedProgram} userId={userId}/>
 };
 
 export default Programs;

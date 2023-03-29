@@ -9,7 +9,7 @@ import { RootState } from '../../store'
 import { DateTime, Duration } from 'luxon';
 import { setHideSearchBar } from '../../redux/features/user/userSlice';
 
-const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: string | undefined, program: Program, changeSelectedProgram: () => void}) => {
+const SelectedProgram = ({ program, changeSelectedProgram, userId, windowSize }: { windowSize: { width: number | undefined, height: number | undefined}, userId: string | undefined, program: Program, changeSelectedProgram: () => void}) => {
     const [stage, setStage] = useState<number | null>(null);
     const dispatch = useDispatch();
     const { dateClickedForProgram, spacedMonthAndYear } = useSelector((state: RootState) => state[calendarSlice.name]);
@@ -30,8 +30,10 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
     }, [dispatch, result])
 
     useEffect(() => {
-        dispatch(setHideSearchBar(true));
-    }, [dispatch])
+        if (windowSize.width && windowSize.width < 1000){
+            dispatch(setHideSearchBar(true));
+        }
+    }, [dispatch, windowSize.width])
 
     useEffect(() => {
             dispatch(setDateClickedForProgram(null));
@@ -80,16 +82,16 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId }: { userId: s
     
     return(
         <div className={styles.container}>
-            <div style={{ boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.10)', padding: '1rem 1rem 0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <button style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}onClick={changeSelectedProgram}>
+            <div style={{  boxShadow: (windowSize.width && windowSize.width < 1000) ? '0px 4px 5px rgba(0, 0, 0, 0.10)' : 'none', padding: '1rem 1rem 0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}onClick={changeSelectedProgram}>
                     Back
                 </button>
                 {stage === null &&
-                <button style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => setStage(0)}>
+                <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => setStage(0)}>
                     Add Program To Calendar
                 </button>}
                 {stage === 1 && 
-                <button onClick={handleAddProgramToCalendar} style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>
+                <button onClick={handleAddProgramToCalendar} style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>
                     Confirm
                 </button>}
                 {stage === 0 && 

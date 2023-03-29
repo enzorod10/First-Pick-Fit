@@ -2,15 +2,17 @@ import { useSelector } from "react-redux";
 import { userSlice } from "../redux/features/user/userSlice";
 import { RootState } from '../store';
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import { useGetAllPlansQuery } from '../redux/features/userApi/userApi';
 import ProgramsComponent from '../components/Programs/Programs';
 import LoadingIcons from 'react-loading-icons';
+import useWindowSize from "../hooks/useWindowSize";
 
-export default function Programs({ windowSize }: { windowSize: { width: number | undefined, height: number | undefined } }) {
+export default function Programs() {
     const { userId, pageLoadingStatus } = useSelector((state: RootState) => state[userSlice.name])
     const [startup, setStartup]  = useState(false)
     const { data, isSuccess } = useGetAllPlansQuery();
+    const windowSize = useWindowSize();
+
 
     useEffect(() => {
         setTimeout(() => setStartup(true), 200)
@@ -20,7 +22,7 @@ export default function Programs({ windowSize }: { windowSize: { width: number |
 
     return (
         <div style={{ height: '100%', overflowY: 'hidden', opacity: (pageLoadingStatus || !startup) ? '0' : '1', transition: 'opacity 0.2s ease-out' }}>
-            {data && <ProgramsComponent data={data} userId={userId} />}
+            {data && <ProgramsComponent windowSize={windowSize} data={data} userId={userId} />}
         </div>
     )
 }

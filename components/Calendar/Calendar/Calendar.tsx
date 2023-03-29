@@ -62,13 +62,13 @@ const Calendar = ( { windowSize, userId }: { windowSize: { width: number | undef
     return(
         <div className={`${styles.container} ${ !calendarExpanded ? styles.condensed : '' }`}>
             <div className={styles.nav}>
-                <div onClick={() => handleMonthChange('prev')}>
+                <div style={{cursor: 'pointer'}} onClick={() => handleMonthChange('prev')}>
                     {'<'}
                 </div>
                 <div className={styles.monthAndYear}>
                     {monthsOfTheYear[monthSelected - 1]} {yearSelected}
                 </div>
-                <div onClick={() => handleMonthChange('next')}>
+                <div style={{cursor: 'pointer'}} onClick={() => handleMonthChange('next')}>
                     {'>'}
                 </div>
             </div>

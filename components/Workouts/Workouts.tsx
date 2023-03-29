@@ -71,10 +71,6 @@ export const WorkoutsComponent = ({ workouts, userId }: { workouts: WorkoutInter
     if (!isEditingWorkout){
         return(
             <div className={styles.workoutsContainer}>
-                {/* <div className={styles.searchWorkoutNameAndButton}>
-                    <input type="text" placeholder='Search Workouts...' value={search} onChange={e => setSearch(e.target.value)} style={{all: 'unset', width: '100%', fontSize: '0.9rem'}}/>
-                    <button onClick={() => initiateEditMode()} style={{ padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>New Workout</button>
-                </div> */}
                 {!selectedWorkout && 
                 <div className={styles.workoutsInnerContainer}>
                     {search.value.trim() === '' ? workouts.map(workout => {
@@ -309,12 +305,12 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <input value={workoutName} placeholder='New Workout Name' style={{all: 'unset', width: '100%'}} onChange={handleWorkoutNameChange}/>
                     <span style={{display: 'flex', minWidth: 'fit-content', gap: '0.5rem'}}>
-                        {workout && <button style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => (deleteUserWorkout({ userId, workoutId: workout.id }), handleCreatedWorkout?.() ?? handleEditedWorkout?.()) }>Delete</button>}
-                        <button style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => handleCreatedWorkout?.() ?? handleEditedWorkout?.()}>Cancel</button>
-                        <button style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={verifyWorkoutInformation}>Save</button>
+                        {workout && <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => (deleteUserWorkout({ userId, workoutId: workout.id }), handleCreatedWorkout?.() ?? handleEditedWorkout?.()) }>Delete</button>}
+                        <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => handleCreatedWorkout?.() ?? handleEditedWorkout?.()}>Cancel</button>
+                        <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={verifyWorkoutInformation}>Save</button>
                     </span>
                 </div>
-                <ul ref={uniqueAreasRef} className={styles.areasTargeted} style={{ gap: '1rem', height: uniqueAreas && uniqueAreas.length > 0 ? '70px' : '0', transition: 'height 1s ease'}}>
+                <ul ref={uniqueAreasRef} className={styles.areasTargeted} style={{ userSelect: 'none', gap: '1rem', height: uniqueAreas && uniqueAreas.length > 0 ? '70px' : '0', transition: 'height 1s ease'}}>
                     {uniqueAreas && uniqueAreas.map(area => {
                         return (
                             <li style={{margin: '0 auto'}} key={area.id}>
@@ -332,7 +328,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                                     <div key={exercise.id} ref={el => workoutExercisesRef.current[i] = el} className={styles.individualWorkoutExercises} > 
                                         <div style={{fontSize: '0.8rem', width: '90%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
                                             <div>{exercise.name}</div>
-                                            {newSetMode.id !== exercise.id && <button onClick={() => (setNewSetMode({...newSetMode, id: exercise.id}), workoutExercisesRef.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }))} style={{ padding: '2px 10px', border: 'none', fontSize: '0.6rem', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>Add Sets</button>}
+                                            {newSetMode.id !== exercise.id && <button onClick={() => (setNewSetMode({...newSetMode, id: exercise.id}), workoutExercisesRef.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }))} style={{ padding: '2px 10px', border: 'none', fontSize: '0.6rem', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content', cursor: 'pointer' }}>Add Sets</button>}
                                         </div>
                                         <div style={{display: 'flex', flexDirection: 'column', width: '100%', gap: '2px'}}>
                                             {exercise.sets.length > 0 && 
@@ -340,7 +336,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                                                     {exercise.sets.map((setBlock, index) => {
                                                     return (
                                                         <li key={setBlock.id} style={{display: 'flex', width: '100%', alignItems: 'center', gap: '4px', fontSize: '0.8rem'}}>
-                                                            <Image onClick={() => deleteSet(exercise.id, index)} src='/images/icons/remove.png' alt='removeIcon' width='12' height='12'/>
+                                                            <Image style={{ cursor: 'pointer' }} onClick={() => deleteSet(exercise.id, index)} src='/images/icons/remove.png' alt='removeIcon' width='12' height='12'/>
                                                             <span style={{minWidth: 'max-content', alignItems: 'center', display: 'flex', gap: '2px'}}>
                                                                 <span> {setBlock.sets} </span>
                                                                 <span> x </span>
@@ -354,21 +350,21 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                                             {newSetMode.id === exercise.id && 
                                             <div style={{display: 'flex', flexDirection: 'column', width: '100%', fontSize: '0.7rem', borderRadius: '2px', border: '1px var(--oxford-blue) solid'}}>
                                                 <div style={{display: 'flex', flexDirection: 'row', borderBottom: '1px var(--oxford-blue) solid', padding: '0.3rem'}}>
-                                                    <span style={{width: '50%'}}>Sets:</span> <span className={styles.newSetBlockInfo} style={{display: 'flex', justifyContent: 'space-evenly', width: '100%'}}> <span onClick={() => updateSet('sets', 'decrease')}> - </span> <span style={{width: '40px', textAlign: 'center'}}> {newSetMode.data.sets}</span> <span onClick={() => updateSet('sets', 'increase')}> + </span> </span>
+                                                    <span style={{width: '50%'}}>Sets:</span> <span className={styles.newSetBlockInfo} style={{display: 'flex', justifyContent: 'space-evenly', width: '100%'}}> <span onClick={() => updateSet('sets', 'decrease')} style={{ cursor: 'pointer' }}> - </span> <span style={{width: '40px', textAlign: 'center'}}> {newSetMode.data.sets}</span> <span onClick={() => updateSet('sets', 'increase')} style={{ cursor: 'pointer' }}> + </span> </span>
                                                 </div>
                                                 <div style={{display: 'flex', flexDirection: 'row', borderBottom: '1px var(--oxford-blue) solid', padding: '0.3rem'}}>
-                                                    <span style={{width: '50%'}}>Reps:</span> <span className={styles.newSetBlockInfo} style={{display: 'flex', justifyContent: 'space-evenly', width: '100%'}}> <span onClick={() => updateSet('reps', 'decrease')}> - </span> <span style={{width: '40px', textAlign: 'center'}}> {newSetMode.data.reps} </span> <span onClick={() => updateSet('reps', 'increase')}> + </span> </span>
+                                                    <span style={{width: '50%'}}>Reps:</span> <span className={styles.newSetBlockInfo} style={{display: 'flex', justifyContent: 'space-evenly', width: '100%'}}> <span onClick={() => updateSet('reps', 'decrease')} style={{ cursor: 'pointer' }}> - </span> <span style={{width: '40px', textAlign: 'center'}}> {newSetMode.data.reps} </span> <span onClick={() => updateSet('reps', 'increase')} style={{ cursor: 'pointer' }}> + </span> </span>
                                                 </div>
                                                 <div style={{display: 'flex', flexDirection: 'row', borderBottom: '1px var(--oxford-blue) solid', padding: '0.3rem'}}>
-                                                    <span style={{width: '50%'}}>Weight:</span> <span className={styles.newSetBlockInfo} style={{display: 'flex', justifyContent: 'space-evenly', width: '100%'}}> <span onClick={() => updateSet('weight', 'decrease')}> - </span> <input style={{ fontSize: '0.7rem', borderTop: 'none', borderLeft: 'none', borderRight: 'none', borderBottomColor: 'var(--charcoal)', WebkitAppearance: 'none', borderRadius: 0, borderBottomWidth: '1px', width: '40px', color: 'var(--charcoal)', textAlign: 'center'}} value={`${newSetMode.data.weight}`} onChange={e => setNewSetMode({...newSetMode, data: {...newSetMode.data, weight: Number(e.currentTarget.value)}})} type='number' /> <span onClick={() => updateSet('weight', 'increase')}> + </span> </span>
+                                                    <span style={{width: '50%'}}>Weight:</span> <span className={styles.newSetBlockInfo} style={{display: 'flex', justifyContent: 'space-evenly', width: '100%'}}> <span onClick={() => updateSet('weight', 'decrease')} style={{ cursor: 'pointer' }}> - </span> <input className={styles.weightInput} style={{ fontSize: '0.7rem', borderTop: 'none', borderLeft: 'none', borderRight: 'none', borderBottomColor: 'var(--charcoal)', WebkitAppearance: 'none', borderRadius: 0, borderBottomWidth: '1px', width: '40px', color: 'var(--charcoal)', textAlign: 'center'}} value={`${newSetMode.data.weight}`} onChange={e => setNewSetMode({...newSetMode, data: {...newSetMode.data, weight: Number(e.currentTarget.value)}})} type='number' /> <span onClick={() => updateSet('weight', 'increase')} style={{ cursor: 'pointer' }}> + </span> </span>
                                                 </div>
                                                 <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around', padding: '0.3rem'}}>
-                                                    <button onClick={() => setNewSetMode({id: '', data: { sets: 3, reps: 8, weight: 100, id: '' }})} style={{ fontSize: '0.7rem', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>Cancel</button>
-                                                    <button onClick={() => handleNewSet(exercise.id)} style={{ fontSize: '0.7rem', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>Add</button> 
+                                                    <button onClick={() => setNewSetMode({id: '', data: { sets: 3, reps: 8, weight: 100, id: '' }})} style={{ cursor: 'pointer', fontSize: '0.7rem', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>Cancel</button>
+                                                    <button onClick={() => handleNewSet(exercise.id)} style={{ cursor: 'pointer', fontSize: '0.7rem', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>Add</button> 
                                                 </div>
                                             </div>}
                                         </div>
-                                        <Image onClick={() => (workoutExercisesRef.current[i]?.setAttribute('style', 'opacity: 0'), setTimeout(() => setWorkoutExercises((prevState: AllocatedExercise[] | null) => prevState ? prevState.filter((prevExercise: AllocatedExercise) => exercise.id !== prevExercise.id) : null), 400))} src='/images/icons/remove.png' alt='removeIcon' width='18' height='18'/>
+                                        <Image style={{ cursor: 'pointer' }} onClick={() => (workoutExercisesRef.current[i]?.setAttribute('style', 'opacity: 0'), setTimeout(() => setWorkoutExercises((prevState: AllocatedExercise[] | null) => prevState ? prevState.filter((prevExercise: AllocatedExercise) => exercise.id !== prevExercise.id) : null), 400))} src='/images/icons/remove.png' alt='removeIcon' width='18' height='18'/>
                                     </div>
                                 )
                             })}
@@ -436,7 +432,7 @@ const DraggableExercise = ( { exercise, children }: { exercise: Exercise, childr
     });
 
     return (
-        <li style={{ touchAction: 'manipulation' }} ref={setNodeRef} {...attributes} {...listeners} >
+        <li style={{ touchAction: 'manipulation', cursor: 'move' }} ref={setNodeRef} {...attributes} {...listeners} >
             {children}
         </li>
     )

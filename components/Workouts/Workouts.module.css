@@ -60,6 +60,17 @@
     opacity: 1 !important;
 }
 
+.weightInput::-webkit-outer-spin-button,
+.weightInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.weightInput[type=number] {
+  -moz-appearance: textfield;
+}
+
 /* Exercises section of creator */
 
 .exercisesCreatorContainer{

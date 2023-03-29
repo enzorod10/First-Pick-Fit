@@ -20,7 +20,8 @@ const Exercise = ( { exercise, userId }: AppProps ) => {
         transform: CSS.Transform.toString(transform),
         transition: transition + ', ' + 'opacity 0.4s ease-out',
         touchAction: 'manipulation',
-        opacity: disappear ? '0' : '1'
+        opacity: disappear ? '0' : '1',
+        cursor: 'move'
     };
 
     return(
@@ -32,7 +33,7 @@ const Exercise = ( { exercise, userId }: AppProps ) => {
                         {exercise.name}
                     </div>
                     <div style={{fontSize: '0.7rem', display: 'flex', width: 'fit-content'}}>
-                        <span onClick={() => (setDisappear(true), deleteUserSavedExercise({userId, exerciseId: exercise.id}))}>Remove</span>
+                        <span style={{cursor: 'pointer'}} onClick={() => (setDisappear(true), deleteUserSavedExercise({userId, exerciseId: exercise.id}))}>Remove</span>
                     </div>
                 </div>
             </div>

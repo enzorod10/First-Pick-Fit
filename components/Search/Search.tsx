@@ -11,9 +11,9 @@ const Search = ({ pathname }: { pathname: string}) => {
     const { search, hideSearchBar } = useSelector((state: RootState) => state[userSlice.name])
 
     return(
-    <div className={styles.searchItemNameAndButton} style={{justifyContent: 'space-between', display: !hideSearchBar ? 'flex' : 'none' }}>
+    <div className={styles.searchItemNameAndButton} style={{justifyContent: 'space-between', userSelect: 'none', display: !hideSearchBar ? 'flex' : 'none' }}>
         <input type="text" placeholder= {'Search' + ' ' + pathname.slice(1)} value={search.value} onChange={e => dispatch(setSearchedItems({ type: pathname, value: e.target.value}))} style={{all: 'unset', color: 'var(--charcoal)', fontSize: '0.9rem', width: '100%'}}/>
-        <button onClick={() => dispatch(setClickedOnButton(true))} style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', visibility: ['/exercises', '/workouts'].includes(pathname) ? 'visible' : 'hidden', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content', textTransform: 'capitalize' }}>New {pathname.slice(1, (pathname.length - 1))}</button>
+        <button onClick={() => dispatch(setClickedOnButton(true))} style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', visibility: ['/exercises', '/workouts'].includes(pathname) ? 'visible' : 'hidden', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content', textTransform: 'capitalize' }}>New {pathname.slice(1, (pathname.length - 1))}</button>
     </div>)
 };
 

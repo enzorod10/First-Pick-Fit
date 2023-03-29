@@ -11,8 +11,8 @@
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   border-radius: 10px;
@@ -26,7 +26,7 @@
     background: rgba(0,0,0,0.4);
 }
 ::-webkit-scrollbar-thumb:active{
-    background: rgba(0,0,0,.9);
+    background: rgba(0, 0, 0, 0.511);
 }
 
 @font-face {
@@ -45,15 +45,15 @@
 body{
     overflow: hidden;
     font-family: Roboto Regular, sans-serif;
-    max-width: 450px;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
 }
 
 #__next{
     height: 100%;
     overflow: hidden;
     display: flex;
-    flex-direction: column;
 }
 
 /* Login Page Section */

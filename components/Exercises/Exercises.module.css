@@ -5,6 +5,7 @@
     height: 100%;
     overflow-y: auto;
     transition: opacity 0.2s ease-out;
+    user-select: none;
 }
 
 .innerContainer{
@@ -42,7 +43,6 @@
     border: 1px var(--charcoal) solid;
     border-radius: 5px;
     padding: 3px;
-    pointer-events: none;
     box-shadow: rgba(0, 0, 0, 0.10) 0px 4px 4px 0px;
 }
 
@@ -50,4 +50,10 @@
     font-size: 0.6rem;
     font-style: italic;
     color: var(--charcoal);
+}
+
+@media (min-width: 768px) {
+    .areasTargeted > li > img:hover {
+        background-color: #d3d3d3;
+    }
 }

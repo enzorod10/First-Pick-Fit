@@ -10,7 +10,7 @@ import { RootState } from '../../store';
 
 import styles from './Nav.module.css';
 
-const Nav = () => {
+const Nav = ( { windowSize }: { windowSize: { width: number | undefined, height: number | undefined }}) => {
     const dispatch = useDispatch();
     const { calendarExpanded } = useSelector((state: RootState) => state[calendarSlice.name])
     const router = useRouter();
@@ -40,9 +40,10 @@ const Nav = () => {
             <li onClick={() => handleTabSwitch('/dashboard')}>
                 <span className={`${router.pathname === '/dashboard' && styles.active}`}>Dashboard</span>
             </li>
+            {windowSize.width && windowSize.width < 1000 &&
             <li onClick={() => handleTabSwitch('/programs')}>
                 <span className={`${router.pathname === '/programs' && styles.active}`}>Programs</span>
-            </li>
+            </li>}
             <li onClick={() => handleTabSwitch('/workouts')}>
                 <span className={`${router.pathname === '/workouts' && styles.active}`}>Workouts</span>
             </li>

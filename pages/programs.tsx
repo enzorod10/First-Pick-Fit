@@ -6,6 +6,7 @@ import { useGetAllPlansQuery } from '../redux/features/userApi/userApi';
 import ProgramsComponent from '../components/Programs/Programs';
 import LoadingIcons from 'react-loading-icons';
 import useWindowSize from "../hooks/useWindowSize";
+import Head from "next/head";
 
 export default function Programs() {
     const { userId, pageLoadingStatus } = useSelector((state: RootState) => state[userSlice.name])
@@ -21,8 +22,13 @@ export default function Programs() {
     if (!isSuccess) return <div style={{height: '100%', display: 'grid', placeItems: 'center'}}> <LoadingIcons.BallTriangle stroke='var(--charcoal)'/> </div>
 
     return (
-        <div style={{ height: '100%', overflowY: 'hidden', opacity: (pageLoadingStatus || !startup) ? '0' : '1', transition: 'opacity 0.2s ease-out' }}>
-            {data && <ProgramsComponent windowSize={windowSize} data={data} userId={userId} />}
-        </div>
+        <>
+            <Head>
+                <title>Programs</title>
+            </Head>
+            <div style={{ height: '100%', overflowY: 'hidden', opacity: (pageLoadingStatus || !startup) ? '0' : '1', transition: 'opacity 0.2s ease-out' }}>
+                {data && <ProgramsComponent windowSize={windowSize} data={data} userId={userId} />}
+            </div>
+        </>
     )
 }

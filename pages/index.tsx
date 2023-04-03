@@ -4,6 +4,7 @@ import { userSlice } from "../redux/features/user/userSlice";
 import { RootState } from '../store';
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import Head from 'next/head';
 
 export default function Home( { windowSize }: { windowSize: { width: number | undefined, height: number | undefined }}) {
   const { loginStatus } = useSelector((state: RootState) => state[userSlice.name])
@@ -14,5 +15,12 @@ export default function Home( { windowSize }: { windowSize: { width: number | un
     loginStatus && router.push('/dashboard')
   }, [loginStatus, router])
 
-  return <LandingPage windowSize={windowSize} />
+  return (
+    <>
+    <Head>
+      <title>First Pick Fit</title>
+    </Head>
+      <LandingPage windowSize={windowSize} />
+    </>
+  )
 }

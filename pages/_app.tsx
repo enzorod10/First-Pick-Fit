@@ -85,6 +85,7 @@ export default function App({ Component, pageProps, ...appProps }: AppProps) {
         <meta name="keywords" content="fitness, tracker, workouts, exercises" />
         <meta name="author" content="Enzo Rodriguez" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
       <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         {(['/dashboard', '/workouts', '/exercises', '/programs']).includes(appProps.router.pathname) ?

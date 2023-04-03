@@ -5,6 +5,7 @@ import { userSlice } from '../redux/features/user/userSlice';
 import { RootState } from '../store';
 import LoadingIcons from 'react-loading-icons';
 import { useEffect, useState } from "react";
+import Head from "next/head";
 
 export default function Workouts() {
     const { userId, pageLoadingStatus } = useSelector((state: RootState) => state[userSlice.name])
@@ -18,8 +19,16 @@ export default function Workouts() {
     if (!isSuccess) return <div style={{height: '100%', display: 'grid', placeItems: 'center'}}> <LoadingIcons.BallTriangle stroke='var(--charcoal)'/> </div>
 
     return (
-        <div style={{ height: '100%', overflowY: 'hidden', opacity: (pageLoadingStatus || !startup) ? '0' : '1', transition: 'opacity 0.2s ease-out' }}>
-            {data && <WorkoutsComponent workouts={data} userId={userId}/>}
-        </div>
+        <>
+            <Head>
+                <title>
+                    Workouts
+                </title>
+            </Head>
+            <div style={{ height: '100%', overflowY: 'hidden', opacity: (pageLoadingStatus || !startup) ? '0' : '1', transition: 'opacity 0.2s ease-out' }}>
+                {data && <WorkoutsComponent workouts={data} userId={userId}/>}
+            </div>
+        </>
+
     )
 }

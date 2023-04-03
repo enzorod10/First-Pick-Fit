@@ -23,9 +23,6 @@ const Layout = ( { children, windowSize }: { children: React.ReactNode, windowSi
 
     return(
         <>
-            <Head>
-                <title>{children ? (children as any)?.type?.name + ' - First Pick Fit' : 'First Pick Fit'}</title>
-            </Head>
             <div style={{ zIndex: 2, position: 'relative', margin: 'auto', height: windowSize.width && windowSize.width >= 1000  ? '94%' : '100%', width: windowSize.width, maxWidth: '450px', overflow: 'hidden', display: 'flex', flexDirection: 'column'}}>
                 <Calendar windowSize={windowSize} userId={userId}/>
                 {router.pathname !=='/dashboard'&& <SearchComponent pathname={router.pathname}/>}
@@ -54,7 +51,6 @@ const Layout = ( { children, windowSize }: { children: React.ReactNode, windowSi
 
                 <Programs windowSize={windowSize} data={data} userId={userId}/>
             </div>}
-            
         </>
     )
 }

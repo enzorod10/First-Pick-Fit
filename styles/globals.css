@@ -12,8 +12,9 @@
 
 ::-webkit-scrollbar {
   width: 5px;
-  height: 5px;
+  height: 3px;
 }
+
 ::-webkit-scrollbar-track {
   border-radius: 10px;
   background: rgba(0,0,0,0.1);
@@ -67,9 +68,4 @@ body{
 .loginPage button{
     border: none;
     cursor: pointer;
-}
-
-/* Login Page Section */
-@media screen and (min-width: 600px) {
-    
 }

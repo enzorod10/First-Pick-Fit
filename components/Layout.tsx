@@ -26,17 +26,35 @@ const Layout = ( { children, windowSize }: { children: React.ReactNode, windowSi
             <Head>
                 <title>{children ? (children as any)?.type?.name + ' - First Pick Fit' : 'First Pick Fit'}</title>
             </Head>
-            <div style={{height: '100%', width: windowSize.width, maxWidth: '450px', overflow: 'hidden', display: 'flex', flexDirection: 'column'}}>
+            <div style={{ zIndex: 2, position: 'relative', margin: 'auto', height: windowSize.width && windowSize.width >= 1000  ? '94%' : '100%', width: windowSize.width, maxWidth: '450px', overflow: 'hidden', display: 'flex', flexDirection: 'column'}}>
                 <Calendar windowSize={windowSize} userId={userId}/>
                 {router.pathname !=='/dashboard'&& <SearchComponent pathname={router.pathname}/>}
                 { children }
                 <Nav windowSize={windowSize} />
             </div>
-            {windowSize.width && windowSize.width >= 1000 && data && 
-            <div style={{ maxWidth: '450px', padding: '0rem 1rem', margin: '5rem 0px'}}>
-                <Programs windowSize={windowSize} data={data} userId={userId}/>
-            </div>
+            {windowSize.width && windowSize.width >= 1000 && 
+                <div style={{zIndex: 2, borderRadius: '5%', backgroundColor: 'rgba(240, 240, 240, 0.8)', minWidth: '45px', padding: '0 2px', display: 'flex', gap: '10px', justifyContent: 'space-evenly',  flexDirection: 'column', boxShadow: 'rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px', margin: '3% 0 3% 0.5rem', height: '94%', content: '', }}>
+                    {[1, 2, 3, 4, 5, 6].map(item => {
+                        return(
+                            <div key={item} style={{ position: 'relative', width: '100%', height: '16px', border: '7px var(--charcoal) solid', boxShadow: '0px -2px 5px 3px rgba(70, 83, 98, 0.2)', borderBottom: 'none', borderTopRightRadius: '50%', borderTopLeftRadius: '50%', content: '', backgroundColor: 'transparent', }}>
+                                <div>
+
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
             }
+            {windowSize.width && windowSize.width >= 1000 && 
+            <div style={{position: 'absolute', width: '100%', height: '94%', margin: '3% 0% 3% 0%', left: 0, backgroundColor: 'lightgray', opacity: '0.2', borderRadius: '10px'}}>
+
+            </div>}
+            {windowSize.width && windowSize.width >= 1000 && data && 
+            <div style={{ position: 'relative', zIndex: 2, maxWidth: '450px', margin: '5rem 0px'}}>
+
+                <Programs windowSize={windowSize} data={data} userId={userId}/>
+            </div>}
+            
         </>
     )
 }

@@ -20,7 +20,7 @@
 }
 ::-webkit-scrollbar-thumb{
   border-radius: 10px;
-  background: rgba(0,0,0,0.2);
+  background: var(--charcoal);
 }
 ::-webkit-scrollbar-thumb:hover{
     background: rgba(0,0,0,0.4);
@@ -54,6 +54,7 @@ body{
     height: 100%;
     overflow: hidden;
     display: flex;
+    position: relative;
 }
 
 /* Login Page Section */

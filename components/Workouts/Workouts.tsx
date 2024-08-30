@@ -305,9 +305,13 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <input value={workoutName} placeholder='New Workout Name' style={{all: 'unset', width: '100%'}} onChange={handleWorkoutNameChange}/>
                     <span style={{display: 'flex', minWidth: 'fit-content', gap: '0.5rem'}}>
-                        {workout && <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => (deleteUserWorkout({ userId, workoutId: workout.id }), handleCreatedWorkout?.() ?? handleEditedWorkout?.()) }>Delete</button>}
-                        <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => handleCreatedWorkout?.() ?? handleEditedWorkout?.()}>Cancel</button>
-                        <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={verifyWorkoutInformation}>Save</button>
+                        <button className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs text-center dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800" onClick={() => handleCreatedWorkout?.() ?? handleEditedWorkout?.()}>
+                            Cancel
+                        </button>
+                        <button className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-3 py-2 text-xs text-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800" onClick={verifyWorkoutInformation}>
+                            Save
+                        </button>
+                        {workout && <button className="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" onClick={() => (deleteUserWorkout({ userId, workoutId: workout.id }), handleCreatedWorkout?.() ?? handleEditedWorkout?.()) }>Delete</button>}
                     </span>
                 </div>
                 <ul ref={uniqueAreasRef} className={styles.areasTargeted} style={{ userSelect: 'none', gap: '1rem', height: uniqueAreas && uniqueAreas.length > 0 ? '70px' : '0', transition: 'height 1s ease'}}>
@@ -328,7 +332,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                                     <div key={exercise.id} ref={el => workoutExercisesRef.current[i] = el} className={styles.individualWorkoutExercises} > 
                                         <div style={{fontSize: '0.8rem', width: '90%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
                                             <div>{exercise.name}</div>
-                                            {newSetMode.id !== exercise.id && <button onClick={() => (setNewSetMode({...newSetMode, id: exercise.id}), workoutExercisesRef.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }))} style={{ padding: '2px 10px', border: 'none', fontSize: '0.6rem', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content', cursor: 'pointer' }}>Add Sets</button>}
+                                            {newSetMode.id !== exercise.id && <button onClick={() => (setNewSetMode({...newSetMode, id: exercise.id}), workoutExercisesRef.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }))} className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Add Sets</button>}
                                         </div>
                                         <div style={{display: 'flex', flexDirection: 'column', width: '100%', gap: '2px'}}>
                                             {exercise.sets.length > 0 && 
@@ -375,7 +379,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                     <div style={{border: '1px var(--oxford-blue) solid', backgroundColor: successfullyDropped ? 'white' : 'var(--charcoal)', opacity: '0.1'}} className={`${styles.individualWorkoutExercises} ${successfullyDropped ? styles.active : ''}`}>
                         <div className={`${successfullyDropped ? styles.active : ''}`} style={{ opacity: '0', fontSize: '0.8rem', width: '90%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
                             <div>{ghostPiece}</div>
-                            <button style={{ padding: '2px 10px', border: 'none', fontSize: '0.6rem', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>Add Sets</button>
+                            <button className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg px-3 py-2 text-xs dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Add Sets</button>
                         </div>
                         <div style={{display: 'flex', flexDirection: 'column', width: '100%', gap: '2px'}}>
                         </div>
@@ -389,7 +393,7 @@ const WorkoutEditor = ( { handleCreatedWorkout, handleEditedWorkout, workout, us
                         <DraggableExercise key={exercise.id} exercise={exercise}>
                             <div className={styles.individualExercisesToDrag}>
                                 <span style={{minWidth: 'fit-content', fontSize: '0.8rem', display: 'flex', justifyContent: 'center', gap:'0.5rem'}}>
-                                    <Image src='/images/icons/drag.png' alt='drag and drop' width='9' height='15'/>
+                                    <Image src='/images/icons/drag.png' alt='drag and drop' width='12' height='12'/>
                                     {exercise.name}
                                 </span>
                                 <ul className={styles.areasTargeted}>

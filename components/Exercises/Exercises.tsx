@@ -169,8 +169,8 @@ const Exercises = ( { data, userId, pageLoadingStatus }: {data: ExerciseInterfac
                         })}
                     </ul>
                     <div style={{display: 'flex', justifyContent: 'space-evenly', width: '100%'}}>
-                        <button onClick={cancelNewExercise} style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content', cursor: 'pointer' }}> Cancel </button>
-                        <button onClick={handleNewExercise} style={{ boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content', cursor: 'pointer' }}> Save </button>
+                        <button onClick={cancelNewExercise} className="px-3 py-2 text-xs font-medium text-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"> Cancel </button>
+                        <button onClick={handleNewExercise} className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"> Save </button>
                     </div>
                 </div>
             }

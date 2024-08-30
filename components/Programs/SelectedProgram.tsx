@@ -83,15 +83,15 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId, windowSize }:
     return(
         <div className={styles.container}>
             <div style={{  boxShadow: (windowSize.width && windowSize.width < 1000) ? '0px 4px 5px rgba(0, 0, 0, 0.10)' : 'none', padding: '1rem 1rem 0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}onClick={changeSelectedProgram}>
+                <button className="px-3 py-2 text-xs font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800" onClick={changeSelectedProgram}>
                     Back
                 </button>
                 {stage === null &&
-                <button style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }} onClick={() => setStage(0)}>
-                    Add Program To Calendar
+                <button className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" onClick={() => setStage(0)}>
+                    Add program to calendar
                 </button>}
                 {stage === 1 && 
-                <button onClick={handleAddProgramToCalendar} style={{ cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.10) 0px 4px 4px 0px', padding: '3px 12px', border: 'none', borderRadius: '5px', color: 'var(--charcoal)', minWidth: 'max-content' }}>
+                <button onClick={handleAddProgramToCalendar} className="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     Confirm
                 </button>}
                 {stage === 0 && 
@@ -101,7 +101,7 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId, windowSize }:
                         loop={1}
                         cursor
                         cursorStyle='|'
-                        typeSpeed={120}
+                        typeSpeed={35}
                         deleteSpeed={50}
                         delaySpeed={2000}
                     />
@@ -113,7 +113,7 @@ const SelectedProgram = ({ program, changeSelectedProgram, userId, windowSize }:
                         loop={1}
                         cursor
                         cursorStyle='|'
-                        typeSpeed={120}
+                        typeSpeed={35}
                         deleteSpeed={50}
                         delaySpeed={2000}
                     />

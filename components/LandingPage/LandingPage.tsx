@@ -1,11 +1,20 @@
 'use client';
 
-import Image from "next/image"
-import { useRouter } from "next/router"
+import Image from "next/image";
+import { useRouter } from "next/router";
 import { Footer } from "./Footer";
+import { useSelector } from "react-redux";
+import { RootState } from '../../store'
+import { userSlice } from "../../redux/features/user/userSlice";
+import { useEffect } from "react";
 
 export default function LandingPage() {
     const router = useRouter();
+    const { loginStatus } = useSelector((state: RootState) => state[userSlice.name])
+
+    useEffect(() => {
+        loginStatus && router.push('/dashboard')
+    }, [loginStatus, router])
 
     return (
         <div className="w-full">

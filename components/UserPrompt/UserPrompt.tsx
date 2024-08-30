@@ -94,7 +94,7 @@ const UserPrompt = ( {pageLoadingStatus}: {pageLoadingStatus: boolean} ) => {
                                     loop={1}
                                     cursor
                                     cursorStyle=''
-                                    typeSpeed={100}
+                                    typeSpeed={35}
                                     deleteSpeed={50}
                                     delaySpeed={2000}/>
                                 </span>

@@ -41,6 +41,7 @@
 
 .dashboard{
     height: 100%;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     padding-top: 0.5rem;

@@ -1,7 +1,7 @@
 .searchItemNameAndButton{
     display: flex;
     align-items: center;
-    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.10);
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.10);
     border-radius: 2px;
     padding: 1rem 1rem 0.5rem 1rem;
 }

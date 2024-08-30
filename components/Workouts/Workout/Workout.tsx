@@ -3,7 +3,7 @@ import { useAddUserSavedWorkoutExerciseMutation } from '../../../redux/features/
 import { useSelector } from 'react-redux'
 import { userSlice } from '../../../redux/features/user/userSlice';
 import { RootState } from '../../../store';
-import Workout from '../../../interfaces/Workout';
+import { default as WorkoutType } from '../../../interfaces/Workout';
 import { useDraggable } from "@dnd-kit/core";
 import {
     useDndMonitor,
@@ -14,8 +14,8 @@ import AllocatedExercise from '../../../interfaces/AllocatedExercise';
 import Image from 'next/image';
 
 interface AppProps{
-    workout: Workout;
-    initiateEditMode: (workout?: Workout) =>  void;
+    workout: WorkoutType;
+    initiateEditMode: (workout?: WorkoutType) =>  void;
 }
 
 const Workout = ( { workout, initiateEditMode }: AppProps) => {
@@ -64,7 +64,7 @@ const Workout = ( { workout, initiateEditMode }: AppProps) => {
 
 export const DraggableWorkout = (props: any) => {
     const {attributes, listeners, setNodeRef} = useDraggable({
-        id: props.workout.id, data: { type: 'workout', workout: props.workout, renderDragLayout: ({workout} : {workout: Workout}) => <div style={{ fontSize: '0.6rem', borderRadius: '2px', backgroundColor: 'rgba(211,211,211, 0.45)', padding: '0.18rem', display: 'flex', alignItems: 'flex-end', color: 'var(--charcoal)', border: '1px #0119364a solid', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: document.querySelector('#date-1')?.getBoundingClientRect().width, height: document.querySelector('#date-1')?.getBoundingClientRect().height }}> {workout.name} </div> }
+        id: props.workout.id, data: { type: 'workout', workout: props.workout, renderDragLayout: ({workout} : {workout: WorkoutType}) => <div style={{ fontSize: '0.6rem', borderRadius: '2px', backgroundColor: 'rgba(211,211,211, 0.45)', padding: '0.18rem', display: 'flex', alignItems: 'flex-end', color: 'var(--charcoal)', border: '1px #0119364a solid', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: document.querySelector('#date-1')?.getBoundingClientRect().width, height: document.querySelector('#date-1')?.getBoundingClientRect().height }}> {workout.name} </div> }
     });
 
     return (

@@ -1,5 +1,4 @@
-import Head from 'next/head';
-import React, { useState } from 'react';
+import React from 'react';
 import Calendar from '../components/Calendar/Calendar/Calendar';
 import Nav from './Nav/Nav';
 import { useSelector } from "react-redux";
@@ -25,7 +24,7 @@ const Layout = ( { children, windowSize }: { children: React.ReactNode, windowSi
         <>
             <div className='z-10 relative flex flex-col h-full w-full sm:min-w-[450px] max-w-[450px] overflow-hidden'>
                 <Calendar windowSize={windowSize} userId={userId}/>
-                {router.pathname !=='/dashboard'&& <SearchComponent pathname={router.pathname}/>}
+                {router.pathname !=='/dashboard' && <SearchComponent pathname={router.pathname}/>}
                 { children }
                 <Nav windowSize={windowSize} />
             </div>

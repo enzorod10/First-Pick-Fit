@@ -23,7 +23,7 @@ const Layout = ( { children, windowSize }: { children: React.ReactNode, windowSi
 
     return(
         <>
-            <div style={{ zIndex: 2, position: 'relative', margin: 'auto', height: windowSize.width && windowSize.width >= 1000  ? '94%' : '100%', width: windowSize.width, maxWidth: '450px', overflow: 'hidden', display: 'flex', flexDirection: 'column'}}>
+            <div className='z-10 relative flex flex-col h-full w-full sm:min-w-[450px] max-w-[450px] overflow-hidden'>
                 <Calendar windowSize={windowSize} userId={userId}/>
                 {router.pathname !=='/dashboard'&& <SearchComponent pathname={router.pathname}/>}
                 { children }
@@ -42,10 +42,7 @@ const Layout = ( { children, windowSize }: { children: React.ReactNode, windowSi
                     })}
                 </div>
             }
-            {windowSize.width && windowSize.width >= 1000 && 
-            <div style={{position: 'absolute', width: '100%', height: '94%', margin: '3% 0% 3% 0%', left: 0, backgroundColor: 'lightgray', opacity: '0.2', borderRadius: '10px'}}>
 
-            </div>}
             {windowSize.width && windowSize.width >= 1000 && data && 
             <div style={{ position: 'relative', zIndex: 2, maxWidth: '450px', margin: '5rem 0px'}}>
 

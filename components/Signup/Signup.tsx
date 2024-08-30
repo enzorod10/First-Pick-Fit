@@ -70,7 +70,7 @@ export default function Signup({ windowSize, changeAuthStage }: { windowSize: { 
                 {errorMessage !== '' && <span style={{position: 'absolute', color: '#d73b3e', fontSize: '13px', bottom: '-25px', left: 0}}> {errorMessage} </span>}
             </form>
             <div style={{margin: 'auto auto', fontSize: '0.8rem'}}>
-                &copy;2023 Enzo All rights reserved.
+                &copy;2023 First Pick Fit All rights reserved.
             </div>
         </div>
     )

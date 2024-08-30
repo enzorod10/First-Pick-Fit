@@ -55,9 +55,9 @@ body{
 
 #__next{
     height: 100%;
-    width: 100%;
     display: flex;
     position: relative;
+    justify-content: center;
 }
 
 /* Login Page Section */
@@ -70,4 +70,11 @@ body{
 .loginPage button{
     border: none;
     cursor: pointer;
+}
+
+
+@media (max-width: 640px) {
+    #__next{
+        width: 100%;
+    }
 }

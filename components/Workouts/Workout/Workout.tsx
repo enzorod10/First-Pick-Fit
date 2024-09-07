@@ -33,10 +33,11 @@ const Workout = ( { workout, initiateEditMode }: AppProps) => {
     })
 
     return(
-        <div onClick={() => initiateEditMode(workout)} className={styles.container}>
+        <div className={styles.container}>
             <div style={{display: 'flex', flexDirection: 'column', width: '100%', gap: '0.3rem'}}>
-                <div style={{fontSize: '0.8rem', fontWeight: 'bold', color: 'var(--charcoal)',width: '100%', wordWrap: 'break-word', paddingLeft: '0rem'}}>
+                <div className='flex justify-between' style={{fontSize: '0.8rem', fontWeight: 'bold', color: 'var(--charcoal)', width: '100%', wordWrap: 'break-word', paddingLeft: '0rem'}}>
                     {workout.name}
+                    <Image onClick={() => initiateEditMode(workout)} width={16} height={10} alt='edit' src='/images/icons/edit.png'/>
                 </div>
                 <div style={{width: '100%', display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
                     <Image style={{pointerEvents: 'none'}} src='/images/icons/drag.png' alt='drag and drop' width='9' height='15'/>

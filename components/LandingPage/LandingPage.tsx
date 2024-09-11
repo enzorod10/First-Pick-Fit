@@ -18,11 +18,16 @@ export default function LandingPage() {
 
     return (
         <div className="w-full">
-            <nav className="h-14 flex items-center px-4 border-b gap-3">
+            <nav className="h-14 flex items-center px-4 border-b gap-3 justify-between">
+                <div className="flex gap-3 items-center">
                     <Image src='/images/logo/logo.png' alt='First Pick Fit Logo' height='64' width='64'/>
                     <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
                         First Pick Fit
                     </h4>
+                </div>
+                <button type="button" onClick={() => router.push('/login')} className="focus:outline-none text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-violet-600 dark:hover:bg-violet-700 dark:focus:ring-violet-900">
+                    Login
+                </button>
             </nav>
             <div className="lg:flex max-w-screen-2xl mx-auto">
                 <Image

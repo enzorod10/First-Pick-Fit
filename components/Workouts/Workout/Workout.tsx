@@ -69,8 +69,8 @@ export const DraggableWorkout = (props: any) => {
     });
 
     return (
-        <div ref={setNodeRef} style={{touchAction: 'manipulation', position: 'relative', WebkitUserSelect: 'none'}} {...attributes}>
-            <div {...listeners} style={{ cursor: 'move', touchAction: 'manipulation', position:'absolute', height: '100%', width: '85px'}}></div>
+        <div ref={setNodeRef} {...listeners} style={{touchAction: 'manipulation', position: 'relative', WebkitUserSelect: 'none'}} {...attributes}>
+            {/* <div {...listeners} style={{ cursor: 'move', touchAction: 'manipulation', position:'absolute', height: '100%', width: '85px'}}></div> */}
             {props.children}
         </div>
     )

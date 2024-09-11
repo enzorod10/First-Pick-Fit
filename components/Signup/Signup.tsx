@@ -43,8 +43,8 @@ export default function Signup({ windowSize, changeAuthStage }: { windowSize: { 
 
     return (
         <div className='loginPage mx-auto' style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', width: '100%'}}>
-            <form style={{display: 'flex', position: 'relative', flexDirection: 'column', alignItems:'center', width: '80%', maxWidth: '350px', margin: 'auto auto', gap: '12px'}}>
-                <Image src='/images/logo/logo.png' alt='First Pick Fit Logo' height='64' width='64'/>
+            <form style={{display: 'flex', position: 'relative', flexDirection: 'column', alignItems:'center', width: '100%', maxWidth: '350px', margin: 'auto auto', gap: '12px'}}>
+            <Image src='/images/logo/logo.png' alt='First Pick Fit Logo' height='64' width='64'/>
                 <h2 style={{color: 'var(--oxford-blue)'}}>Join Today</h2>
                 <h3 style={{textAlign: 'center'}}> Reach your fitness goals.</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%' }}>
